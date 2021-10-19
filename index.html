@@ -9,9 +9,79 @@
 		<title>Weather App</title>
 	</head>
 	<body>
-		<section class="today--weather"></section>
-		<section class="today--highlights"></section>
-		<section class="weekly--weather"></section>
-		<nav class="main--navbar"></nav>
+		<div class="wrapper">
+			<div class="location">
+				<img src="" alt="" />
+				<h1 class="city">
+					New York,
+					<h2 class="country">USA</h2>
+				</h1>
+			</div>
+
+			<section class="today--weather">
+				<h2 class="today--date">Sun, October 17</h2>
+				<div class="today--conditions">
+					<img src="" alt="" class="today--icon" />
+					<h1 class="today--degrees">12°</h1>
+					<div class="today--details">
+						<h3 class="conditions">Mostly Cloudy</h3>
+						<h3 class="degrees">12°/-2°</h3>
+						<h3 class="rain">Rain - 30%</h3>
+					</div>
+				</div>
+				<div class="today--hourly__conditions">
+					<div class="hour--conditions">
+						<h3 class="hour">3 am</h3>
+						<img src="" alt="" class="hour--image" />
+						<h2 class="hour--degrees">15°</h2>
+						<div class="hour--rain">
+							<img src="" alt="" class="hour--rain__icon" />
+							<h3 class="hour--precipitation"></h3>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<section class="today--highlights">
+				<div class="highlights">
+					<img src="" alt="" class="highlight--image__icon" />
+					<h2 class="highlight--name">UV Index</h2>
+					<h2 class="highlight--value">Moderate</h2>
+				</div>
+			</section>
+
+			<section class="weekly--weather">
+				<div class="daily">
+					<h2 class="name">Today</h2>
+					<div class="daily--rain">
+						<img src="" alt="" class="daily--rain__icon" />
+						<h3 class="daily--precipitation"></h3>
+					</div>
+					<img src="" alt="" class="daily--image" />
+					<h2 class="daily--degrees">15°/3°</h2>
+				</div>
+			</section>
+
+			<nav class="main--navbar">
+				<div class="today">
+					<img src="" alt="" class="nav--today__icon" />
+					<h3 class="nav--today__name">Today</h3>
+				</div>
+				<div class="weekly">
+					<img src="" alt="" class="nav--weekly__icon" />
+					<h3 class="nav--weekly__name">Weekly</h3>
+				</div>
+				<div class="search">
+					<img src="" alt="" class="nav--search__icon" />
+					<h3 class="nav--search__name">Search</h3>
+				</div>
+				<div class="switch">
+					<img src="" alt="" class="nav--celsius__icon" />
+					<h3 class="nav--celsius__name">°C</h3>
+					<img src="" alt="" class="nav--fahrenheit__icon" />
+					<h3 class="nav--fahrenheit__name">°F</h3>
+				</div>
+			</nav>
+		</div>
 	</body>
 </html>
