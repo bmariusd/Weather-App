@@ -4,6 +4,9 @@
 		<meta charset="UTF-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<style>
+			@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800;900&display=swap');
+		</style>
 		<link rel="stylesheet" href="style.css" />
 		<script defer src="./app.js"></script>
 		<title>Weather App</title>
@@ -11,17 +14,14 @@
 	<body>
 		<div class="wrapper">
 			<div class="location">
-				<img src="" alt="" />
-				<h1 class="city">
-					New York,
-					<h2 class="country">USA</h2>
-				</h1>
+				<img src="/images/location-pin.svg" alt="" />
+				<h1 class="city">New York, <span class="country">USA</span></h1>
 			</div>
 
 			<section class="today--weather">
 				<h2 class="today--date">Sun, October 17</h2>
 				<div class="today--conditions">
-					<img src="" alt="" class="today--icon" />
+					<object data="/images/thunderstorm.svg" type="image/svg+xml" class="today--icon"></object>
 					<h1 class="today--degrees">12°</h1>
 					<div class="today--details">
 						<h3 class="conditions">Mostly Cloudy</h3>
@@ -32,11 +32,11 @@
 				<div class="today--hourly__conditions">
 					<div class="hour--conditions">
 						<h3 class="hour">3 am</h3>
-						<img src="" alt="" class="hour--image" />
+						<object data="/images/few-clouds.svg" type="image/svg+xml" class="hour--image"></object>
 						<h2 class="hour--degrees">15°</h2>
 						<div class="hour--rain">
-							<img src="" alt="" class="hour--rain__icon" />
-							<h3 class="hour--precipitation"></h3>
+							<object data="/images/rain-logo.svg" type="image/svg+xml" class="hour--rain__icon"></object>
+							<h3 class="hour--precipitation">50%</h3>
 						</div>
 					</div>
 				</div>
@@ -54,32 +54,32 @@
 				<div class="daily">
 					<h2 class="name">Today</h2>
 					<div class="daily--rain">
-						<img src="" alt="" class="daily--rain__icon" />
-						<h3 class="daily--precipitation"></h3>
+						<img src="/images/rain-logo.svg" alt="" class="daily--rain__icon" />
+						<h3 class="daily--precipitation">35%</h3>
 					</div>
-					<img src="" alt="" class="daily--image" />
+					<object data="/images/shower-rain.svg" type="image/svg+xml" class="daily--image"></object>
 					<h2 class="daily--degrees">15°/3°</h2>
 				</div>
 			</section>
 
 			<nav class="main--navbar">
 				<div class="today">
-					<img src="" alt="" class="nav--today__icon" />
+					<img src="/images/today.svg" alt="" class="nav--today__icon" />
 					<h3 class="nav--today__name">Today</h3>
 				</div>
 				<div class="weekly">
-					<img src="" alt="" class="nav--weekly__icon" />
+					<img src="/images/weekly.svg" alt="" class="nav--weekly__icon" />
 					<h3 class="nav--weekly__name">Weekly</h3>
 				</div>
 				<div class="search">
-					<img src="" alt="" class="nav--search__icon" />
+					<img src="/images/search.svg" alt="" class="nav--search__icon" />
 					<h3 class="nav--search__name">Search</h3>
 				</div>
 				<div class="switch">
-					<img src="" alt="" class="nav--celsius__icon" />
+					<!-- <img src="" alt="" class="nav--celsius__icon" />
 					<h3 class="nav--celsius__name">°C</h3>
 					<img src="" alt="" class="nav--fahrenheit__icon" />
-					<h3 class="nav--fahrenheit__name">°F</h3>
+					<h3 class="nav--fahrenheit__name">°F</h3> -->
 				</div>
 			</nav>
 		</div>
