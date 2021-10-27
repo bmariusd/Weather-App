@@ -206,34 +206,6 @@ body {
 	margin: auto;
 }
 
-.main--navbar img {
-	width: 20px;
-	margin: auto;
-	padding-bottom: 0.25em;
-}
-
-.today {
-	display: flex;
-	flex-direction: column;
-	grid-column: 1 / 2;
-	margin: auto;
-	color: var(--main-color);
-}
-
-.weekly {
-	display: flex;
-	flex-direction: column;
-	grid-column: 2 / 3;
-	margin: auto;
-}
-
-.search {
-	display: flex;
-	flex-direction: column;
-	grid-column: 3 / 4;
-	margin: auto;
-}
-
 .daily {
 	display: grid;
 	grid-column: 1 / 5;
@@ -267,4 +239,63 @@ body {
 
 .daily:last-child {
 	border-bottom: none;
+}
+
+.main--navbar img {
+	width: 20px;
+	margin: auto;
+	padding-bottom: 0.25em;
+}
+
+.today {
+	display: flex;
+	flex-direction: column;
+	grid-column: 1 / 2;
+	margin: auto;
+	color: var(--main-color);
+}
+
+.weekly {
+	display: flex;
+	flex-direction: column;
+	grid-column: 2 / 3;
+	margin: auto;
+}
+
+.search {
+	display: flex;
+	flex-direction: column;
+	grid-column: 3 / 4;
+	margin: auto;
+}
+
+.switch {
+	grid-column: 4 / 5;
+	margin: auto;
+}
+
+.toggle-button {
+	background: gray;
+	width: 60px;
+	height: 25px;
+	border-radius: 25px;
+	padding: 5px;
+	cursor: pointer;
+	transition: all 300ms ease-in-out;
+}
+
+.toggle-button > .inner-circle {
+	background: white;
+	width: 25px;
+	height: 25px;
+	border-radius: 50%;
+	transition: all 300ms ease-in-out;
+}
+
+.toggle-button.active {
+	background: var(--main-color);
+}
+
+.toggle-button.active > .inner-circle {
+	margin-left: 35px;
 }

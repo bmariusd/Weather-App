@@ -32,3 +32,9 @@ for (let i = 0; i < 12; i++) {
 	);
 	i++;
 }
+
+const toggle = document.querySelector('.toggle-button');
+
+toggle.addEventListener('click', () => {
+	toggle.classList.toggle('active');
+});
