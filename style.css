@@ -70,6 +70,25 @@ body {
 	grid-template-columns: 0.25fr 2.5fr 0.25fr;
 }
 
+.location {
+	display: flex;
+	align-items: center;
+	grid-row: 1 / 2;
+	grid-column: 2 / 3;
+	font-weight: 500;
+	font-size: 18px;
+}
+
+.location .country {
+	font-weight: 400;
+}
+
+.location img {
+	width: 12px;
+	padding-right: 0.25em;
+}
+
+/** Today data **/
 .today--weather {
 	display: grid;
 	padding: 1em 1em 0.5em 1em;
@@ -81,62 +100,6 @@ body {
 	border-radius: 10px;
 }
 
-.today--highlights {
-	display: none;
-	padding: 1em;
-	margin-top: 0.5rem;
-	grid-row: 3 / 4;
-	grid-column: 2 / 3;
-	grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-	grid-template-columns: 2fr 0.5fr 0.5fr 1fr;
-	background-color: var(--secondary-bg-color);
-	border-radius: 10px;
-}
-
-.weekly--weather {
-	display: grid;
-	padding: 0.5em 1em 0.5em 1em;
-	margin-top: 0.5rem;
-	grid-row: 3 / 4;
-	grid-column: 2 / 3;
-	grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-	row-gap: 0.25em;
-	grid-template-columns: 2fr 0.5fr 0.5fr 1fr;
-	background-color: var(--secondary-bg-color);
-	border-radius: 10px;
-}
-
-.main--navbar {
-	display: grid;
-	padding: 0 1em 0 1em;
-	margin: 0.5rem 0 0.5rem 0;
-	grid-row: 4 / 5;
-	grid-column: 2 / 3;
-	grid-template-rows: 1fr;
-	grid-template-columns: 1fr 1fr 1fr 1.5fr;
-	background-color: var(--secondary-bg-color);
-	border-radius: 25px;
-	font-size: 12px;
-}
-
-.location {
-	display: flex;
-	align-items: center;
-	grid-row: 1 / 2;
-	grid-column: 2 / 3;
-	font-weight: 500;
-}
-
-.location .country {
-	font-weight: 400;
-}
-
-.location img {
-	width: 10px;
-	padding-right: 0.25em;
-}
-
-/** Today data **/
 .today--date {
 	grid-row: 1 / 2;
 	grid-column: 1 / 6;
@@ -183,7 +146,8 @@ body {
 }
 
 .hour {
-	margin: auto;
+	margin: 0 auto 0 auto;
+	align-self: end;
 }
 
 .hour--image {
@@ -204,6 +168,62 @@ body {
 	font-size: 16px;
 	font-weight: 500;
 	margin: auto;
+}
+
+/** Today highlights data **/
+.today--highlights {
+	display: grid;
+	padding: 0.5em 1em 0.5em 1em;
+	margin-top: 0.5rem;
+	grid-row: 3 / 4;
+	grid-column: 2 / 3;
+	grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr;
+	row-gap: 0.25em;
+	grid-template-columns: 0.5fr 2fr 1fr;
+	background-color: var(--secondary-bg-color);
+	border-radius: 10px;
+}
+
+.highlights {
+	display: grid;
+	grid-column: 1 / 4;
+	grid-template-rows: 1fr;
+	grid-template-columns: 0.5fr 2fr 1fr;
+	align-items: center;
+	padding-bottom: 0.25em;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+	font-size: 14px;
+}
+
+.highlight--image__icon {
+	height: 32px;
+	justify-self: center;
+}
+
+.highlight--name {
+	padding-left: 0.25em;
+}
+
+.highlight--value {
+	justify-self: flex-end;
+}
+
+.highlights:last-child {
+	border-bottom: none;
+}
+
+/** Daily data **/
+.weekly--weather {
+	display: none;
+	padding: 0.5em 1em 0.5em 1em;
+	margin-top: 0.5rem;
+	grid-row: 3 / 4;
+	grid-column: 2 / 3;
+	grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+	row-gap: 0.25em;
+	grid-template-columns: 2fr 0.5fr 0.5fr 1fr;
+	background-color: var(--secondary-bg-color);
+	border-radius: 10px;
 }
 
 .daily {
@@ -241,6 +261,20 @@ body {
 	border-bottom: none;
 }
 
+/** Navbar data **/
+.main--navbar {
+	display: grid;
+	padding: 0 1em 0 1em;
+	margin: 0.5rem 0 0.5rem 0;
+	grid-row: 4 / 5;
+	grid-column: 2 / 3;
+	grid-template-rows: 1fr;
+	grid-template-columns: 1fr 1fr 1fr 1.5fr;
+	background-color: var(--secondary-bg-color);
+	border-radius: 25px;
+	font-size: 12px;
+}
+
 .main--navbar img {
 	width: 20px;
 	margin: auto;
@@ -248,6 +282,9 @@ body {
 }
 
 .today {
+	background: none;
+	border: 0;
+	cursor: pointer;
 	display: flex;
 	flex-direction: column;
 	grid-column: 1 / 2;
@@ -256,6 +293,9 @@ body {
 }
 
 .weekly {
+	background: none;
+	border: 0;
+	cursor: pointer;
 	display: flex;
 	flex-direction: column;
 	grid-column: 2 / 3;
@@ -275,9 +315,9 @@ body {
 }
 
 .toggle-button {
-	background: gray;
+	background: var(--third-bg-color);
 	width: 60px;
-	height: 25px;
+	height: 20px;
 	border-radius: 25px;
 	padding: 5px;
 	cursor: pointer;
@@ -286,8 +326,8 @@ body {
 
 .toggle-button > .inner-circle {
 	background: white;
-	width: 25px;
-	height: 25px;
+	width: 20px;
+	height: 20px;
 	border-radius: 50%;
 	transition: all 300ms ease-in-out;
 }
@@ -297,5 +337,149 @@ body {
 }
 
 .toggle-button.active > .inner-circle {
-	margin-left: 35px;
+	margin-left: 40px;
+}
+
+.toggle-button .fahrenheit {
+	display: none;
+}
+
+.celsius {
+	font-size: 20px;
+	margin-left: 1.75em;
+	color: white;
+}
+
+.toggle-button.active .celsius {
+	display: none;
+}
+
+.toggle-button.active .fahrenheit {
+	display: block;
+	font-size: 20px;
+	margin-left: -1.75em;
+	color: white;
+}
+
+.search--active {
+}
+
+@media screen and (min-width: 374px) {
+	/** Daily data **/
+	.today--hourly__conditions {
+		font-size: 14px;
+	}
+
+	.hour {
+		margin: 0 auto 0 auto;
+		align-self: end;
+	}
+
+	.hour--degrees {
+		font-size: 18px;
+	}
+
+	/** Today highlights data **/
+	.highlights {
+		font-size: 18px;
+	}
+
+	.highlight--image__icon {
+		height: 40px;
+	}
+
+	/** Weekly data **/
+	.daily {
+		font-size: 18px;
+	}
+
+	.daily--rain {
+		font-size: 16px;
+	}
+
+	/** Navbar data **/
+	.main--navbar {
+		font-size: 14px;
+	}
+
+	.main--navbar img {
+		width: 22px;
+	}
+}
+
+@media screen and (min-height: 730px) {
+	/** Location data **/
+	.location {
+		font-size: 20px;
+	}
+
+	.location img {
+		width: 15px;
+	}
+
+	/** Daily data **/
+	.today--date {
+		align-self: center;
+	}
+
+	.today--weather {
+		padding: 1em;
+		grid-template-rows: 0.5fr 1.25fr 2fr;
+	}
+
+	.today--icon {
+		width: 60px;
+	}
+
+	.today--degrees {
+		font-size: 3.5em;
+	}
+
+	.today--details {
+		font-size: 15px;
+	}
+
+	.today--hourly__conditions {
+		font-size: 14px;
+	}
+
+	.hour {
+		margin: 0 auto 0 auto;
+		align-self: end;
+	}
+
+	.hour--degrees {
+		font-size: 20px;
+	}
+
+	/** Today highlights data **/
+	.highlights {
+		font-size: 20px;
+	}
+
+	.highlight--image__icon {
+		width: 45px;
+	}
+
+	.highlight--name {
+		padding-left: 0.5em;
+	}
+
+	/** Weekly data **/
+	.daily {
+		font-size: 20px;
+	}
+
+	.daily--rain {
+		font-size: 18px;
+	}
+
+	/** Navbar data **/
+	.main--navbar {
+		font-size: 16px;
+	}
+
+	.main--navbar img {
+		width: 24px;
+	}
 }
