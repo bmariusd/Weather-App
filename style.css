@@ -345,6 +345,7 @@ body {
 }
 
 .celsius {
+	display: block;
 	font-size: 20px;
 	margin-left: 1.75em;
 	color: white;
@@ -359,9 +360,6 @@ body {
 	font-size: 20px;
 	margin-left: -1.75em;
 	color: white;
-}
-
-.search--active {
 }
 
 @media screen and (min-width: 374px) {
@@ -481,5 +479,134 @@ body {
 
 	.main--navbar img {
 		width: 24px;
+	}
+}
+
+@media screen and (min-height: 910px) {
+	/** Location data **/
+	.location {
+		font-size: 24px;
+	}
+
+	.location img {
+		width: 20px;
+	}
+
+	/** Daily data **/
+	.today--date {
+		align-self: center;
+		font-size: 20px;
+	}
+
+	.today--weather {
+		padding: 1em;
+		grid-template-rows: 0.5fr 1.25fr 2fr;
+	}
+
+	.today--icon {
+		width: 100px;
+	}
+
+	.today--degrees {
+		padding-left: 0.1em;
+		font-size: 5em;
+	}
+
+	.today--details {
+		font-size: 20px;
+	}
+
+	.today--details h3 {
+		padding-top: 0.15em;
+	}
+
+	.today--hourly__conditions {
+		font-size: 20px;
+	}
+
+	.hour {
+		margin: 0 auto 0 auto;
+		align-self: end;
+	}
+
+	.hour--degrees {
+		font-size: 26px;
+	}
+
+	.hour--image {
+		width: 50px;
+	}
+
+	.hour--rain__icon {
+		width: 15px;
+	}
+
+	/** Today highlights data **/
+	.highlights {
+		font-size: 24px;
+	}
+
+	.highlight--image__icon {
+		width: 60px;
+		height: 60px;
+	}
+
+	.highlight--value {
+		padding-right: 0.5em;
+	}
+
+	/** Weekly data **/
+	.daily {
+		padding: 0 1em 0 1em;
+		font-size: 26px;
+	}
+
+	.daily--rain {
+		font-size: 22px;
+	}
+
+	.daily--image {
+		width: 60px;
+		justify-self: flex-end;
+	}
+
+	.daily--rain__icon {
+		width: 15px;
+	}
+
+	/** Navbar data **/
+	.main--navbar img {
+		width: 35px;
+	}
+
+	.main--navbar h3 {
+		font-size: 20px;
+	}
+
+	.toggle-button {
+		width: 120px;
+		height: 45px;
+		border-radius: 50px;
+	}
+
+	.toggle-button > .inner-circle {
+		width: 45px;
+		height: 45px;
+	}
+
+	.toggle-button.active > .inner-circle {
+		margin-left: 75px;
+	}
+
+	.toggle-button .celsius {
+		font-size: 40px;
+		margin-left: 1.65em;
+		padding-top: 0.1em;
+	}
+
+	.toggle-button.active .fahrenheit {
+		font-size: 40px;
+		margin-left: -1.35em;
+		padding-top: 0.1em;
 	}
 }
