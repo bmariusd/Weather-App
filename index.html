@@ -18,17 +18,28 @@
 			</div>
 
 			<section class="today--weather">
-				<h2 class="today--date">Sun, October 17</h2>
+				<h2 class="today--date"><span>Saturday</span>, 17 October 2021</h2>
 				<div class="today--conditions">
 					<object data="/images/thunderstorm.svg" type="image/svg+xml" class="today--icon"></object>
-					<h1 class="today--degrees">12°</h1>
+					<h1 class="today--degrees">12°<sup>C</sup></h1>
 					<div class="today--details">
-						<h3 class="conditions">Mostly Cloudy</h3>
-						<h3 class="degrees">12°/-2°</h3>
-						<h3 class="rain">Rain - 30%</h3>
+						<div class="conditions"><object data="/images/few-clouds.svg" type="image/svg+xml" class="hour--weather__desktop"></object><h3> Mostly Cloudy</h3></div>
+						<h3 class="degrees"><img src="/images/min-max.svg" alt="" />12°/-2°</h3>
+						<h3 class="rain"><img src="/images/rain-desktop.svg" alt="" />Rain - 30%</h3>
 					</div>
 				</div>
-				<div class="today--hourly__conditions">
+				<div class='main--search'>
+					<img src="/images/search.svg" alt="" class="nav--search__icon" />
+					<input type="search" name="" id="" class="nav--search__name" placeholder="Search for places . . .">
+					<button class='main--search__btn'><span>+</span></button>
+				</div>
+				<div class="main--city">
+					<img src="/images/new-york.jpg" alt="" class="main--city__img">
+					<h2 class="main--city__name">New York, <span class="country">USA</span></h2>
+				</div>
+
+
+				<!-- <div class="today--hourly__conditions">
 					<div class="hour--conditions">
 						<h3 class="hour">3 am</h3>
 						<object data="/images/few-clouds.svg" type="image/svg+xml" class="hour--image"></object>
@@ -38,7 +49,7 @@
 							<h3 class="hour--precipitation">50%</h3>
 						</div>
 					</div>
-				</div>
+				</div> -->
 			</section>
 
 			<section class="today--highlights">
