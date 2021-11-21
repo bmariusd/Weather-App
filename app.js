@@ -1,13 +1,13 @@
 const hourly = document.querySelector('.hour--conditions');
 const daily = document.querySelector('.daily');
 const weekly = document.querySelector('.weekly--weather');
-const highlights = document.querySelector('.highlights');
+const highlights = document.querySelector('.today--highlights');
 const toggle = document.querySelector('.toggle-button');
 const navbar = document.querySelector('.main--navbar');
 const todayBtn = document.querySelector('.today');
 const weeklyBtn = document.querySelector('.weekly');
 
-for (let i = 0; i < 9; i++) {
+for (let i = 0; i < 6; i++) {
 	hourly.insertAdjacentHTML(
 		'afterend',
 		`<div class="hour--conditions">
@@ -20,7 +20,6 @@ for (let i = 0; i < 9; i++) {
     </div>
     </div>`
 	);
-	i++;
 }
 
 for (let i = 0; i < 6; i++) {
@@ -38,16 +37,16 @@ for (let i = 0; i < 6; i++) {
 	);
 }
 
-for (let i = 0; i < 5; i++) {
-	highlights.insertAdjacentHTML(
-		'afterend',
-		`				<div class="highlights">
-        <img src="/images/uv-index.svg" alt="" class="highlight--image__icon" />
-        <h2 class="highlight--name">UV Index</h2>
-        <h2 class="highlight--value">Moderate</h2>
-    </div>`
-	);
-}
+// for (let i = 0; i < 5; i++) {
+// 	highlights.insertAdjacentHTML(
+// 		'afterend',
+// 		`				<div class="highlights">
+//         <img src="/images/uv-index.svg" alt="" class="highlight--image__icon" />
+//         <h2 class="highlight--name">UV Index</h2>
+//         <h2 class="highlight--value">Moderate</h2>
+//     </div>`
+// 	);
+// }
 
 toggle.addEventListener('click', () => {
 	toggle.classList.toggle('active');
@@ -55,19 +54,19 @@ toggle.addEventListener('click', () => {
 
 //*TODO */
 todayBtn.addEventListener('click', () => {
-	todayBtn.classList.toggle('active');
-	todayBtn.style.color = '#4050d1';
-	weeklyBtn.style.color = 'black';
-	weeklyBtn.classList.toggle('active');
+	todayBtn.classList.add('active');
+	// todayBtn.style.color = '#4050d1';
+	// weeklyBtn.style.color = 'black';
+	weeklyBtn.classList.remove('active');
 	highlights.style.display = 'grid';
 	weekly.style.display = 'none';
 });
 
 weeklyBtn.addEventListener('click', () => {
-	weeklyBtn.classList.toggle('active');
-	weeklyBtn.style.color = '#4050d1';
-	todayBtn.style.color = 'black';
-	todayBtn.classList.toggle('active');
+	weeklyBtn.classList.add('active');
+	// weeklyBtn.style.color = '#4050d1';
+	// todayBtn.style.color = 'black';
+	todayBtn.classList.remove('active');
 	weekly.style.display = 'grid';
 	highlights.style.display = 'none';
 });
