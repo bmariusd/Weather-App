@@ -292,6 +292,10 @@ body {
 	justify-self: flex-end;
 }
 
+.highlight--description {
+	display: none;
+}
+
 /** Daily data **/
 .weekly--weather {
 	display: none;
@@ -1284,6 +1288,48 @@ body {
 	.highlight--description {
 		font-size: 18px;
 		padding-left: 1.75em;
+	}
+
+	/** Progress bar humidity */
+	.humidity--progress__bar,
+	.aqi--progress__bar {
+		display: flex;
+		align-items: flex-end;
+		justify-content: center;
+		grid-row: 1 / 4;
+		align-self: flex-end;
+		justify-self: flex-end;
+		margin: 0 2em 2em 0;
+		width: 24px;
+		height: 130px;
+		background-color: var(--secondary-bg-color);
+		border-radius: 12.5px;
+		border: 1px solid var(--third-bg-color);
+	}
+
+	.humidity--progress__bar::before {
+		content: '';
+		display: flex;
+		width: 20px;
+		height: calc(var(--height, 0) * 1%);
+		min-height: 0;
+		margin-bottom: 5px;
+		max-height: calc(100% - 10px);
+		background-color: var(--main-color);
+		border-radius: 1em;
+	}
+
+	/** Progress bar air quality index */
+	.aqi--progress__bar::before {
+		content: '';
+		display: flex;
+		width: 20px;
+		height: 20px;
+		min-height: 0;
+		margin-bottom: calc(var(--position, 2px));
+		max-height: calc(100% - 10px);
+		background-color: var(--main-color);
+		border-radius: 1em;
 	}
 
 	/** */
