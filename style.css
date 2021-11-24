@@ -279,6 +279,19 @@ body {
 	font-size: 1em;
 }
 
+.sunrise__sunset {
+	display: none;
+}
+
+.highlight--name span {
+	display: none;
+}
+
+.highlight--mobile__value__sunrise,
+.highlight--value__uv__index {
+	justify-self: flex-end;
+}
+
 /** Daily data **/
 .weekly--weather {
 	display: none;
@@ -1088,6 +1101,7 @@ body {
 
 	/** UV Index */
 	.progress {
+		display: block;
 		position: relative;
 		grid-row: 2 / 4;
 		margin: auto;
@@ -1120,6 +1134,7 @@ body {
 	}
 
 	.numbers {
+		display: block;
 		position: absolute;
 	}
 
@@ -1145,6 +1160,10 @@ body {
 		font-size: 30px;
 		font-family: 'Rubik';
 		color: var(--third-bg-color);
+	}
+
+	.highlight--value__uv__index {
+		display: none;
 	}
 
 	/** Wind Status */
@@ -1175,6 +1194,96 @@ body {
 	.highlight--value__windstatus sub {
 		display: inline;
 		font-size: 2.25rem;
+	}
+
+	/** Sunrise & Sunset */
+	.sunrise__sunset {
+		display: grid;
+		grid-row: 2 / 4;
+		grid-template-columns: 1fr 3fr;
+		grid-template-rows: 1fr 1fr;
+	}
+
+	.sunrise__sunset img {
+		display: grid;
+		justify-self: end;
+	}
+
+	.highlight--sunrise {
+		grid-row: 1 / 2;
+		grid-column: 1 / 2;
+		align-self: center;
+	}
+
+	.highlight--sunset {
+		grid-row: 2 / 3;
+		grid-column: 1 / 2;
+		align-self: flex-start;
+	}
+
+	.highlight--value__sunrise {
+		grid-row: 1 / 2;
+		grid-column: 2 / 3;
+		padding: 0.75em 0 0 0.5em;
+	}
+
+	.highlight--value__sunset {
+		grid-row: 2 / 3;
+		grid-column: 2 / 3;
+		padding: 0 0 0 0.5em;
+	}
+
+	.sunrise__sunset h2 {
+		align-self: flex-start;
+		font-size: 24px;
+	}
+
+	.highlight--value__sunrise__difference {
+		grid-row: 1 / 2;
+		grid-column: 2 / 3;
+		padding: 2.75em 0 0 0.75em;
+	}
+
+	.highlight--value__sunset__difference {
+		grid-row: 2 / 3;
+		grid-column: 2 / 3;
+		padding: 1.7em 0 0 0.75em;
+	}
+
+	.sunrise__sunset h3 {
+		align-self: flex-start;
+		font-size: 16px;
+		color: var(--third-bg-color);
+	}
+
+	.highlight--mobile__value__sunrise {
+		display: none;
+	}
+
+	/** General row 2 */
+	.highlights .highlight--value {
+		display: block;
+		grid-row: 2 / 3;
+		padding: 0;
+		align-self: center;
+		justify-self: flex-start;
+		padding-left: 0.5em;
+		font-size: 55px;
+	}
+
+	.highlight--value sup {
+		display: inline;
+		font-size: 1.75rem;
+	}
+
+	.highlight--value sub {
+		display: inline;
+		font-size: 2rem;
+	}
+
+	.highlight--description {
+		font-size: 18px;
+		padding-left: 1.75em;
 	}
 
 	/** */
