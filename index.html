@@ -23,9 +23,9 @@
 					<object data="/images/thunderstorm.svg" type="image/svg+xml" class="today--icon"></object>
 					<h1 class="today--degrees">12°<sup>C</sup></h1>
 					<div class="today--details">
-						<div class="conditions"><object data="/images/few-clouds.svg" type="image/svg+xml" class="hour--weather__desktop"></object><h3> Mostly Cloudy</h3></div>
-						<h3 class="degrees"><img src="/images/min-max.svg" alt="" />12°/-2°</h3>
-						<h3 class="rain"><img src="/images/rain-desktop.svg" alt="" />Rain - 30%</h3>
+						<div class="conditions"><object data="/images/few-clouds.svg" type="image/svg+xml" class="hour--weather__desktop"></object><h3 class="conditions__text">Mostly Cloudy</h3></div>
+						<div class="degrees"><img src="/images/min-max.svg" alt="" /><h3 class="degrees__text">12°/-2°</h3></div>
+						<div class="rain"><img src="/images/rain-desktop.svg" alt="" /><h3 class="rain__text">Rain - 30%</h3></div>
 					</div>
 				</div>
 				<div class='main--search'>
@@ -39,15 +39,29 @@
 				</div>
 			</section>
 
-			<section class="hourly--weather">
+			<section class="hourly--weather active">
 				<div class="today--hourly__conditions">
 					<div class="hour--conditions">
-						<h3 class="hour">3 am</h3>
+						<h3 class="hour">x am</h3>
 						<object data="/images/few-clouds.svg" type="image/svg+xml" class="hour--image"></object>
 						<h2 class="hour--degrees">15°</h2>
 						<div class="hour--rain">
 							<object data="/images/rain-logo.svg" type="image/svg+xml" class="hour--rain__icon"></object>
 							<h3 class="hour--precipitation">50%</h3>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<section class="desktop--weekly__weather">
+				<div class="desktop--weekly__conditions">
+					<div class="weekly__conditions">
+						<h3 class="desktop--weekly">x am</h3>
+						<object data="/images/few-clouds.svg" type="image/svg+xml" class="desktop--weekly__image"></object>
+						<h2 class="desktop--weekly__degrees">15°</h2>
+						<div class="weekly--rain">
+							<object data="/images/rain-logo.svg" type="image/svg+xml" class="weekly--rain__icon"></object>
+							<h3 class="desktop--weekly__precipitation">50%</h3>
 						</div>
 					</div>
 				</div>
@@ -63,7 +77,7 @@
 						<div class="barOverflow">
 						  <div class="bar"></div>
 						</div>
-						<span>2</span>
+						<span class="uv-index">2</span>
 					</div>
 
 					<div class="numbers">
@@ -97,14 +111,18 @@
 						<h2 class="highlight--value__sunset">5:42 PM</h2>
 						<h3 class="highlight--value__sunset__difference">+2m 22s</h3>
 					</div>
+				</div>
 
-
+				<div class="highlights hide">
+					<img src="/images/uv-index.svg" alt="" class="highlight--image__icon" />
+					<h2 class="highlight--name">Sunset</h2>
+					<h2 class="highlight--mobile__value__sunrise">5:25 PM</h2>
 				</div>
 
 				<div class="highlights">
 					<img src="/images/uv-index.svg" alt="" class="highlight--image__icon" />
 					<h2 class="highlight--name">Humidity</h2>
-					<h2 class="highlight--value">25<sup>%</sup></h2>
+					<h2 class="highlight--value highlight--value__humidity">25<sup>%</sup></h2>
 					<h3 class="highlight--description">Normal 🤙</h3>
 					<div class="humidity--progress__bar" style="--height: 25">
 
@@ -114,14 +132,14 @@
 				<div class="highlights">
 					<img src="/images/uv-index.svg" alt="" class="highlight--image__icon" />
 					<h2 class="highlight--name">Visibility</h2>
-					<h2 class="highlight--value">5.2 <sub>km</sub></h2>
+					<h2 class="highlight--value highlight--value__visibility">5.2 <sub>km</sub></h2>
 					<h3 class="highlight--description">Average 😐</h3>
 				</div>
 
 				<div class="highlights">
 					<img src="/images/uv-index.svg" alt="" class="highlight--image__icon" />
 					<h2 class="highlight--name">Air Quality Index</h2>
-					<h2 class="highlight--value">1</h2>
+					<h2 class="highlight--value highlight--value__aqi">1</h2>
 					<h3 class="highlight--description">Good 😀</h3>
 					<div class="aqi--progress__bar" style="--position: 108px">
 
@@ -146,6 +164,7 @@
 			</section>
 
 			<nav class="main--navbar">
+
 				<button class="today active">
 					<img src="/images/today.svg" alt="" class="nav--today__icon" />
 					<h3 class="nav--today__name">Today</h3>
@@ -154,10 +173,17 @@
 					<img src="/images/weekly.svg" alt="" class="nav--weekly__icon" />
 					<h3 class="nav--weekly__name">Weekly</h3>
 				</button>
-				<div class="search search--active">
+				<button class="mobile--search">
+					<img src="/images/search.svg" alt="" class="mobile--search__icon" />
+					<h3 class="mobile--search__name">Search</h3>
+				</button>
+				
+				<div class="search active">
 					<img src="/images/search.svg" alt="" class="nav--search__icon" />
-					<h3 class="nav--search__name">Search</h3>
+					<input type="search" name="" id="" class="nav--search__name" placeholder="Search . . .">
+					<button class='mobile--search__btn'><span>+</span></button>
 				</div>
+
 				<div class="switch">
 						<div class="toggle-button">
 						  <div class="inner-circle">
