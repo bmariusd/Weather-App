@@ -1,6 +1,9 @@
 //* API
-const API_KEY = `AIzaSyB3OwFNcIQkNK6t45-w8P8zEHlpWiU4qco`;
+const API_KEY = 'AIzaSyB3OwFNcIQkNK6t45-w8P8zEHlpWiU4qco';
+const WEATHER_API_KEY = '9ed2728a9438d79484824734002d11f1';
 const userInput = document.querySelectorAll('.nav--search__name');
+let lat = '';
+let long = '';
 
 //* MAIN DETAILS QUERY SELECTORS:
 const mainDate = document.querySelector('.today--date');
@@ -318,12 +321,14 @@ mobileSearchBtn.addEventListener('click', () => {
 });
 
 searchBtn.forEach((x) => {
-	x.addEventListener('click', async (z) => {
+	x.addEventListener('click', async () => {
 		todayNavbar.classList.add('active--grid');
 		weeklyNavbar.classList.add('active--grid');
 		mobileSearch.classList.add('active');
 		search.classList.remove('active');
 		console.log(userInput[0].value);
+		const geo = geoLocate();
+		console.log(geo);
 
 		const proxyUrl = 'https://myc0rsproxy.herokuapp.com/';
 		const placesRequestUrl = `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${userInput[0].value}&key=${API_KEY}&inputtype=textquery&fields=name,photos`;
@@ -331,21 +336,30 @@ searchBtn.forEach((x) => {
 		let photoRef = '';
 
 		userInput[0].value = '';
-		const initialPlacesRequest = fetch(`${proxyUrl + placesRequestUrl}`)
-			.then((res) => res.json())
-			.then((data) => (photoRef = data?.candidates?.[0]?.photos?.[0]?.photo_reference));
-		setTimeout(() => {
-			console.log(photoRef);
-			if (photoRef) {
-				const imageLookupURL = `https://maps.googleapis.com/maps/api/place/photo?photoreference=${photoRef}&key=${API_KEY}&maxwidth=2900&maxheight=1200`;
-				const imageURLQuery = fetch(proxyUrl + imageLookupURL)
-					.then((r) => r.blob())
-					.then(function (myBlob) {
-						let image = URL.createObjectURL(myBlob);
-						cityImg.src = `${image}`;
-					})
-					.catch(console.error);
-			}
-		}, 2000);
+		// const initialPlacesRequest = fetch(`${proxyUrl + placesRequestUrl}`)
+		// 	.then((res) => res.json())
+		// 	.then((data) => (photoRef = data?.candidates?.[0]?.photos?.[0]?.photo_reference));
+		// setTimeout(() => {
+		// 	console.log(photoRef);
+		// 	if (photoRef) {
+		// 		const imageLookupURL = `https://maps.googleapis.com/maps/api/place/photo?photoreference=${photoRef}&key=${API_KEY}&maxwidth=2900&maxheight=1200`;
+		// 		const imageURLQuery = fetch(proxyUrl + imageLookupURL)
+		// 			.then((r) => r.blob())
+		// 			.then(function (myBlob) {
+		// 				let image = URL.createObjectURL(myBlob);
+		// 				cityImg.src = `${image}`;
+		// 			})
+		// 			.catch(console.error);
+		// 	}
+		// }, 2000);
 	});
+	console.log(lat, long);
 });
+
+const geoLocate = async function () {
+	const response = await fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${userInput[0].value}&limit=1&appid=${WEATHER_API_KEY}`);
+	response.then((res) => {
+		console.log(res);
+	});
+	return response;
+};
