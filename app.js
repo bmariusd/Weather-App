@@ -327,8 +327,10 @@ searchBtn.forEach((x) => {
 		mobileSearch.classList.add('active');
 		search.classList.remove('active');
 		console.log(userInput[0].value);
-		const geo = geoLocate();
-		console.log(geo);
+		const data = await geoLocate();
+		lat = data[0].lat;
+		long = data[0].lon;
+		console.log(lat, long);
 
 		const proxyUrl = 'https://myc0rsproxy.herokuapp.com/';
 		const placesRequestUrl = `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${userInput[0].value}&key=${API_KEY}&inputtype=textquery&fields=name,photos`;
@@ -356,10 +358,8 @@ searchBtn.forEach((x) => {
 	console.log(lat, long);
 });
 
-const geoLocate = async function () {
+const geoLocate = async () => {
 	const response = await fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${userInput[0].value}&limit=1&appid=${WEATHER_API_KEY}`);
-	response.then((res) => {
-		console.log(res);
-	});
-	return response;
+	const data = await response.json();
+	return data;
 };
