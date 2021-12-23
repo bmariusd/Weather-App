@@ -3,7 +3,7 @@ const API_KEY = 'AIzaSyB3OwFNcIQkNK6t45-w8P8zEHlpWiU4qco';
 const WEATHER_API_KEY = '9ed2728a9438d79484824734002d11f1';
 const userInput = document.querySelectorAll('.nav--search__name');
 let lat = '';
-let long = '';
+let lon = '';
 
 //* MAIN DETAILS QUERY SELECTORS:
 const mainDate = document.querySelector('.today--date');
@@ -279,9 +279,29 @@ humidityBar.style.setProperty('--height', highlightsData.humidity);
 visibility.innerHTML = `${highlightsData.visibility} <sub>km</sub>`;
 // TODO Average / emoticons to change based on the value of visibility
 
-airQualityIndex.textContent = highlightsData.airQualityIndex;
-aqiBar.style.setProperty('--position', `${134.5 - highlightsData.airQualityIndex * 26.5}px`);
-// TODO Average / emoticons to change based on the value of air quality index
+searchBtn.forEach((x) => {
+	x.addEventListener('click', async () => {
+		todayNavbar.classList.add('active--grid');
+		weeklyNavbar.classList.add('active--grid');
+		mobileSearch.classList.add('active');
+		search.classList.remove('active');
+		console.log(userInput[0].value);
+		const data = await geoLocate();
+		lat = data[0].lat;
+		lon = data[0].lon;
+		const airPolutionData = await airPolution();
+		highlightsData.airQualityIndex = airPolutionData.list[0].main.aqi;
+		console.log(highlightsData.airQualityIndex);
+		updateData();
+		weatherData();
+
+		let photoRef = '';
+
+		// getPhoto();
+
+		userInput[0].value = '';
+	});
+});
 
 //*TODO */
 celsiusFahrenheit.addEventListener('click', () => {
@@ -320,46 +340,48 @@ mobileSearchBtn.addEventListener('click', () => {
 	userInput[1].value = '';
 });
 
-searchBtn.forEach((x) => {
-	x.addEventListener('click', async () => {
-		todayNavbar.classList.add('active--grid');
-		weeklyNavbar.classList.add('active--grid');
-		mobileSearch.classList.add('active');
-		search.classList.remove('active');
-		console.log(userInput[0].value);
-		const data = await geoLocate();
-		lat = data[0].lat;
-		long = data[0].lon;
-		console.log(lat, long);
-
-		const proxyUrl = 'https://myc0rsproxy.herokuapp.com/';
-		const placesRequestUrl = `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${userInput[0].value}&key=${API_KEY}&inputtype=textquery&fields=name,photos`;
-
-		let photoRef = '';
-
-		userInput[0].value = '';
-		// const initialPlacesRequest = fetch(`${proxyUrl + placesRequestUrl}`)
-		// 	.then((res) => res.json())
-		// 	.then((data) => (photoRef = data?.candidates?.[0]?.photos?.[0]?.photo_reference));
-		// setTimeout(() => {
-		// 	console.log(photoRef);
-		// 	if (photoRef) {
-		// 		const imageLookupURL = `https://maps.googleapis.com/maps/api/place/photo?photoreference=${photoRef}&key=${API_KEY}&maxwidth=2900&maxheight=1200`;
-		// 		const imageURLQuery = fetch(proxyUrl + imageLookupURL)
-		// 			.then((r) => r.blob())
-		// 			.then(function (myBlob) {
-		// 				let image = URL.createObjectURL(myBlob);
-		// 				cityImg.src = `${image}`;
-		// 			})
-		// 			.catch(console.error);
-		// 	}
-		// }, 2000);
-	});
-	console.log(lat, long);
-});
-
 const geoLocate = async () => {
 	const response = await fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${userInput[0].value}&limit=1&appid=${WEATHER_API_KEY}`);
 	const data = await response.json();
 	return data;
+};
+
+const getPhoto = async () => {
+	const proxyUrl = 'https://myc0rsproxy.herokuapp.com/';
+	const placesRequestUrl = `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${userInput[0].value}&key=${API_KEY}&inputtype=textquery&fields=name,photos`;
+
+	const initialPlacesRequest = await fetch(`${proxyUrl + placesRequestUrl}`)
+		.then((res) => res.json())
+		.then((data) => (photoRef = data?.candidates?.[0]?.photos?.[0]?.photo_reference));
+
+	if (photoRef) {
+		const imageLookupURL = `https://maps.googleapis.com/maps/api/place/photo?photoreference=${photoRef}&key=${API_KEY}&maxwidth=2900&maxheight=1200`;
+		const imageURLQuery = fetch(proxyUrl + imageLookupURL)
+			.then((r) => r.blob())
+			.then(function (myBlob) {
+				let image = URL.createObjectURL(myBlob);
+				cityImg.src = `${image}`;
+			})
+			.catch(console.error);
+	}
+};
+
+const airPolution = async () => {
+	const response = await fetch(`http://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=${WEATHER_API_KEY}`);
+	const data = await response.json();
+	console.log(data);
+	return data;
+};
+
+const weatherData = async () => {
+	const response = await fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&appid=${WEATHER_API_KEY}`);
+	const data = await response.json();
+	console.log(data);
+	return data;
+};
+
+const updateData = async () => {
+	airQualityIndex.textContent = highlightsData.airQualityIndex;
+	aqiBar.style.setProperty('--position', `${134.5 - highlightsData.airQualityIndex * 26.5}px`);
+	// TODO Average / emoticons to change based on the value of air quality index
 };
