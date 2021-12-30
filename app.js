@@ -177,95 +177,6 @@ for (let i = 0; i < 7; i++) {
 	desktopWeeklyImage[i].setAttribute('data', `/images/${weeklyData.weeklyImages[0]}.svg`);
 }
 
-//* Change highlights data from API!
-uvIndex.textContent = highlightsData.uvIndex;
-uvIndexBar.style.transform = `rotate(${315 + highlightsData.uvIndex * 18}deg)`;
-//* Modify the color of the UV Index Circle based on the index:
-switch (highlightsData.uvIndex) {
-	case 0:
-	case 1:
-	case 2:
-		uvIndexBar.style.borderBottomColor = '#55DF6B';
-		uvIndexBar.style.borderLeftColor = '#55DF6B';
-		break;
-	case 3:
-	case 4:
-	case 5:
-		uvIndexBar.style.borderBottomColor = '#E8EC36';
-		uvIndexBar.style.borderLeftColor = '#E8EC36';
-		break;
-	case 6:
-	case 7:
-		uvIndexBar.style.borderBottomColor = '#DD960D';
-		uvIndexBar.style.borderLeftColor = '#DD960D';
-		break;
-	case 8:
-	case 9:
-		uvIndexBar.style.borderBottomColor = '#DB3030';
-		uvIndexBar.style.borderLeftColor = '#DB3030';
-		break;
-	case 10:
-		uvIndexBar.style.borderBottomColor = '#BD36EC';
-		uvIndexBar.style.borderLeftColor = '#BD36EC';
-		break;
-}
-
-windValue.innerHTML = `${highlightsData.windStatus} <sub>km/h</sub>`;
-windDirectionImg.style.transform = `rotate(${highlightsData.windDirection}deg)`;
-//* Modify the text for wind direction:
-switch (true) {
-	case highlightsData.windDirection >= 348.75 || highlightsData.windDirection < 11.25:
-		windDirection.textContent = 'N';
-		break;
-	case highlightsData.windDirection >= 11.25 && highlightsData.windDirection < 33.75:
-		windDirection.textContent = 'NNE';
-		break;
-	case highlightsData.windDirection >= 33.75 && highlightsData.windDirection < 56.25:
-		windDirection.textContent = 'NE';
-		break;
-	case highlightsData.windDirection >= 56.25 && highlightsData.windDirection < 78.75:
-		windDirection.textContent = 'ENE';
-		break;
-	case highlightsData.windDirection >= 78.75 && highlightsData.windDirection < 101.25:
-		windDirection.textContent = 'E';
-		break;
-	case highlightsData.windDirection >= 101.25 && highlightsData.windDirection < 123.75:
-		windDirection.textContent = 'ESE';
-		break;
-	case highlightsData.windDirection >= 123.75 && highlightsData.windDirection < 146.25:
-		windDirection.textContent = 'SE';
-		break;
-	case highlightsData.windDirection >= 146.25 && highlightsData.windDirection < 168.75:
-		windDirection.textContent = 'SSE';
-		break;
-	case highlightsData.windDirection >= 168.75 && highlightsData.windDirection < 191.25:
-		windDirection.textContent = 'S';
-		break;
-	case highlightsData.windDirection >= 191.25 && highlightsData.windDirection < 213.75:
-		windDirection.textContent = 'SSW';
-		break;
-	case highlightsData.windDirection >= 213.75 && highlightsData.windDirection < 236.25:
-		windDirection.textContent = 'SW';
-		break;
-	case highlightsData.windDirection >= 236.25 && highlightsData.windDirection < 258.75:
-		windDirection.textContent = 'WSW';
-		break;
-	case highlightsData.windDirection >= 258.75 && highlightsData.windDirection < 281.25:
-		windDirection.textContent = 'W';
-		break;
-	case highlightsData.windDirection >= 281.25 && highlightsData.windDirection < 303.75:
-		windDirection.textContent = 'WNW';
-		break;
-	case highlightsData.windDirection >= 303.75 && highlightsData.windDirection < 326.25:
-		windDirection.textContent = 'NW';
-		break;
-	case highlightsData.windDirection >= 326.25 && highlightsData.windDirection < 348.75:
-		windDirection.textContent = 'NNW';
-		break;
-	default:
-		break;
-}
-
 sunrise.textContent = highlightsData.sunrise;
 sunset.textContent = highlightsData.sunset;
 // TODO Difference before yesterday sunrise/sunset and today sunrise/sunset
@@ -291,9 +202,11 @@ searchBtn.forEach((x) => {
 		lon = data[0].lon;
 		const airPolutionData = await airPolution();
 		highlightsData.airQualityIndex = airPolutionData.list[0].main.aqi;
-		console.log(highlightsData.airQualityIndex);
+		const weatherData = await getWeatherData();
+		console.log(weatherData);
+		updateTodayWeather(weatherData);
+
 		updateData();
-		weatherData();
 
 		let photoRef = '';
 
@@ -373,10 +286,9 @@ const airPolution = async () => {
 	return data;
 };
 
-const weatherData = async () => {
+const getWeatherData = async () => {
 	const response = await fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&appid=${WEATHER_API_KEY}`);
 	const data = await response.json();
-	console.log(data);
 	return data;
 };
 
@@ -384,4 +296,111 @@ const updateData = async () => {
 	airQualityIndex.textContent = highlightsData.airQualityIndex;
 	aqiBar.style.setProperty('--position', `${134.5 - highlightsData.airQualityIndex * 26.5}px`);
 	// TODO Average / emoticons to change based on the value of air quality index
+
+	windValue.innerHTML = `${highlightsData.windStatus} <sub>km/h</sub>`;
+	uvIndex.textContent = highlightsData.uvIndex;
+};
+
+const updateTodayWeather = async (data) => {
+	highlightsData.windStatus = data.daily[0].wind_speed;
+	highlightsData.windDirection = data.daily[0].wind_deg;
+	highlightsData.uvIndex = Math.round(data.daily[0].uvi);
+
+	modifyWindDirection(highlightsData.windDirection);
+	modifyUVIndex(highlightsData.uvIndex);
+};
+
+const modifyWindDirection = async (wind) => {
+	windDirectionImg.style.transform = `rotate(${wind}deg)`;
+	//* Modify the text for wind direction:
+	switch (true) {
+		case wind >= 348.75 || wind < 11.25:
+			windDirection.textContent = 'N';
+			break;
+		case wind >= 11.25 && wind < 33.75:
+			windDirection.textContent = 'NNE';
+			break;
+		case wind >= 33.75 && wind < 56.25:
+			windDirection.textContent = 'NE';
+			break;
+		case wind >= 56.25 && wind < 78.75:
+			windDirection.textContent = 'ENE';
+			break;
+		case wind >= 78.75 && wind < 101.25:
+			windDirection.textContent = 'E';
+			break;
+		case wind >= 101.25 && wind < 123.75:
+			windDirection.textContent = 'ESE';
+			break;
+		case wind >= 123.75 && wind < 146.25:
+			windDirection.textContent = 'SE';
+			break;
+		case wind >= 146.25 && wind < 168.75:
+			windDirection.textContent = 'SSE';
+			break;
+		case wind >= 168.75 && wind < 191.25:
+			windDirection.textContent = 'S';
+			break;
+		case wind >= 191.25 && wind < 213.75:
+			windDirection.textContent = 'SSW';
+			break;
+		case wind >= 213.75 && wind < 236.25:
+			windDirection.textContent = 'SW';
+			break;
+		case wind >= 236.25 && wind < 258.75:
+			windDirection.textContent = 'WSW';
+			break;
+		case wind >= 258.75 && wind < 281.25:
+			windDirection.textContent = 'W';
+			break;
+		case wind >= 281.25 && wind < 303.75:
+			windDirection.textContent = 'WNW';
+			break;
+		case wind >= 303.75 && wind < 326.25:
+			windDirection.textContent = 'NW';
+			break;
+		case wind >= 326.25 && wind < 348.75:
+			windDirection.textContent = 'NNW';
+			break;
+		default:
+			break;
+	}
+};
+
+const modifyUVIndex = async (value) => {
+	if (value > 10) {
+		index = 10;
+	} else {
+		index = value;
+	}
+	uvIndexBar.style.transform = `rotate(${315 + index * 18}deg)`;
+	//* Modify the color of the UV Index Circle based on the index:
+	switch (index) {
+		case 0:
+		case 1:
+		case 2:
+			uvIndexBar.style.borderBottomColor = '#55DF6B';
+			uvIndexBar.style.borderLeftColor = '#55DF6B';
+			break;
+		case 3:
+		case 4:
+		case 5:
+			uvIndexBar.style.borderBottomColor = '#E8EC36';
+			uvIndexBar.style.borderLeftColor = '#E8EC36';
+			break;
+		case 6:
+		case 7:
+			uvIndexBar.style.borderBottomColor = '#DD960D';
+			uvIndexBar.style.borderLeftColor = '#DD960D';
+			break;
+		case 8:
+		case 9:
+			uvIndexBar.style.borderBottomColor = '#DB3030';
+			uvIndexBar.style.borderLeftColor = '#DB3030';
+			break;
+		case 10:
+			uvIndexBar.style.borderBottomColor = '#BD36EC';
+			uvIndexBar.style.borderLeftColor = '#BD36EC';
+			break;
+	}
 };
