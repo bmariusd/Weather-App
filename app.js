@@ -87,7 +87,7 @@ const highlightsData = {
 	windDirection: 327,
 	sunrise: '5:24 AM',
 	sunset: '7:23 PM',
-	humidity: 82,
+	humidity: 50,
 	visibility: '4.3',
 	airQualityIndex: 4,
 };
@@ -183,11 +183,8 @@ sunset.textContent = highlightsData.sunset;
 sunriseDifference.textContent = '-3m 25s';
 sunsetDifference.textContent = '+1m 10s';
 
-humidity.innerHTML = `${highlightsData.humidity} <sup>%</sup>`;
-humidityBar.style.setProperty('--height', highlightsData.humidity);
 // TODO Normal / emoticons to change based on the value of humididy
 
-visibility.innerHTML = `${highlightsData.visibility} <sub>km</sub>`;
 // TODO Average / emoticons to change based on the value of visibility
 
 searchBtn.forEach((x) => {
@@ -202,9 +199,14 @@ searchBtn.forEach((x) => {
 		lon = data[0].lon;
 		const airPolutionData = await airPolution();
 		highlightsData.airQualityIndex = airPolutionData.list[0].main.aqi;
+
 		const weatherData = await getWeatherData();
 		console.log(weatherData);
 		updateTodayWeather(weatherData);
+
+		const yesterdayData = await getYesterdayData();
+		console.log(yesterdayData);
+		updateSunriseSunsetDiff(yesterdayData);
 
 		updateData();
 
@@ -292,6 +294,15 @@ const getWeatherData = async () => {
 	return data;
 };
 
+const getYesterdayData = async () => {
+	const epochYesterday = (Date.parse(new Date()) - 86400000) / 1000;
+	const response = await fetch(
+		`http://api.openweathermap.org/data/2.5/onecall/timemachine?lat=${lat}&lon=${lon}&dt=${epochYesterday}&appid=${WEATHER_API_KEY}`
+	);
+	const yesterdayData = await response.json();
+	return yesterdayData;
+};
+
 const updateData = async () => {
 	airQualityIndex.textContent = highlightsData.airQualityIndex;
 	aqiBar.style.setProperty('--position', `${134.5 - highlightsData.airQualityIndex * 26.5}px`);
@@ -305,9 +316,24 @@ const updateTodayWeather = async (data) => {
 	highlightsData.windStatus = data.daily[0].wind_speed;
 	highlightsData.windDirection = data.daily[0].wind_deg;
 	highlightsData.uvIndex = Math.round(data.daily[0].uvi);
+	highlightsData.humidity = data.current.humidity;
+	highlightsData.visibility = data.current.visibility;
+	highlightsData.sunrise = fromEpochToData(data.current.sunrise, data.timezone_offset);
+	highlightsData.sunset = fromEpochToData(data.current.sunset, data.timezone_offset);
 
 	modifyWindDirection(highlightsData.windDirection);
 	modifyUVIndex(highlightsData.uvIndex);
+	modifyHumidity(highlightsData.humidity);
+	modifyVisibility(highlightsData.visibility);
+	modifySunriseSunset(highlightsData.sunrise.slice(0, 5), highlightsData.sunset.slice(0, 5));
+};
+
+const fromEpochToData = (epochTime, timezone) => {
+	let date = new Date(0);
+	date.setUTCSeconds(epochTime + timezone);
+	date = date.toUTCString();
+	let hours = date.slice(-12, -4);
+	return hours;
 };
 
 const modifyWindDirection = async (wind) => {
@@ -403,4 +429,24 @@ const modifyUVIndex = async (value) => {
 			uvIndexBar.style.borderLeftColor = '#BD36EC';
 			break;
 	}
+};
+
+const modifyHumidity = async (value) => {
+	humidity.innerHTML = `${value} <sup>%</sup>`;
+	humidityBar.style.setProperty('--height', highlightsData.humidity);
+};
+
+const modifyVisibility = async (value) => {
+	visibility.innerHTML = `${value / 1000} <sub>km</sub>`;
+};
+
+const modifySunriseSunset = async (sunriseValue, sunsetValue) => {
+	sunrise.innerHTML = sunriseValue;
+	sunset.innerHTML = sunsetValue;
+};
+
+const updateSunriseSunsetDiff = async (yesterdayData) => {
+	let sunriseMinutes = (sunriseDifference.textContent =
+		highlightsData.sunrise - fromEpochToData(yesterdayData.current.sunrise, yesterdayData.timezone_offset));
+	sunsetDifference.textContent = highlightsData.sunset - yesterdayData.current.sunset;
 };
