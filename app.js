@@ -5,6 +5,9 @@ const userInput = document.querySelectorAll('.nav--search__name');
 let lat = '';
 let lon = '';
 
+//* Loading . . .
+const loadingImage = document.querySelector('.loader-wrapper');
+
 //* MAIN DETAILS QUERY SELECTORS:
 const mainDate = document.querySelector('.today--date');
 const mainWeather = document.querySelector('.today--icon');
@@ -188,12 +191,15 @@ sunsetDifference.textContent = '+1m 10s';
 // TODO Average / emoticons to change based on the value of visibility
 
 searchBtn.forEach((x) => {
+	x.addEventListener('click', () => {
+		loadingImage.classList.remove('hide');
+	});
+
 	x.addEventListener('click', async () => {
 		todayNavbar.classList.add('active--grid');
 		weeklyNavbar.classList.add('active--grid');
 		mobileSearch.classList.add('active');
 		search.classList.remove('active');
-		console.log(userInput[0].value);
 		const data = await geoLocate();
 		lat = data[0].lat;
 		lon = data[0].lon;
@@ -201,11 +207,9 @@ searchBtn.forEach((x) => {
 		highlightsData.airQualityIndex = airPolutionData.list[0].main.aqi;
 
 		const weatherData = await getWeatherData();
-		console.log(weatherData);
 		updateTodayWeather(weatherData);
 
 		const yesterdayData = await getYesterdayData();
-		console.log(yesterdayData);
 		updateSunriseSunsetDiff(yesterdayData);
 
 		updateData();
@@ -215,6 +219,7 @@ searchBtn.forEach((x) => {
 		// getPhoto();
 
 		userInput[0].value = '';
+		loadingImage.classList.add('hide');
 	});
 });
 
@@ -251,7 +256,6 @@ mobileSearch.addEventListener('click', () => {
 });
 
 mobileSearchBtn.addEventListener('click', () => {
-	console.log(userInput[1].value);
 	userInput[1].value = '';
 });
 
@@ -284,7 +288,6 @@ const getPhoto = async () => {
 const airPolution = async () => {
 	const response = await fetch(`http://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=${WEATHER_API_KEY}`);
 	const data = await response.json();
-	console.log(data);
 	return data;
 };
 
@@ -446,7 +449,28 @@ const modifySunriseSunset = async (sunriseValue, sunsetValue) => {
 };
 
 const updateSunriseSunsetDiff = async (yesterdayData) => {
-	let sunriseMinutes = (sunriseDifference.textContent =
-		highlightsData.sunrise - fromEpochToData(yesterdayData.current.sunrise, yesterdayData.timezone_offset));
-	sunsetDifference.textContent = highlightsData.sunset - yesterdayData.current.sunset;
+	const todaySunrise = highlightsData.sunrise;
+	const todaySunset = highlightsData.sunset;
+	const yesterdaySunrise = fromEpochToData(yesterdayData.current.sunrise, yesterdayData.timezone_offset);
+	const yesterdaySunset = fromEpochToData(yesterdayData.current.sunset, yesterdayData.timezone_offset);
+
+	let sunriseDiff =
+		todaySunrise.slice(0, 2) * 3600 +
+		+todaySunrise.slice(3, 5) * 60 +
+		+todaySunrise.slice(7, 9) -
+		(yesterdaySunrise.slice(0, 2) * 3600 + +yesterdaySunrise.slice(3, 5) * 60 + +yesterdaySunrise.slice(7, 9));
+
+	let sunsetDiff =
+		todaySunset.slice(0, 2) * 3600 +
+		+todaySunset.slice(3, 5) * 60 +
+		+todaySunset.slice(7, 9) -
+		(yesterdaySunset.slice(0, 2) * 3600 + +yesterdaySunset.slice(3, 5) * 60 + +yesterdaySunset.slice(7, 9));
+
+	Math.abs(sunriseDiff) > 59
+		? (sunriseDifference.textContent = `${Math.trunc(sunriseDiff / 60)}m ${Math.abs(sunriseDiff % 60)}s`)
+		: (sunriseDifference.textContent = `${sunriseDiff}s`);
+
+	Math.abs(sunsetDiff) > 59
+		? (sunsetDifference.textContent = `${Math.trunc(sunsetDiff / 60)}m ${Math.abs(sunsetDiff % 60)}s`)
+		: (sunsetDifference.textContent = `${sunsetDiff}s`);
 };
