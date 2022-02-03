@@ -101,17 +101,17 @@ mainWeather.setAttribute('data', `/images/${mainData.mainWeather}.svg`);
 mainTemp.innerHTML = `${mainData.mainTemp}<sup>C</sup>`;
 mainCondition.textContent = mainData.mainCondition;
 mainDegreesRange.textContent = mainData.mainDegreesRange;
-mainRain.textContent = `Rain - ${mainData.mainRain}`;
+mainRain.textContent = `Pressure - ${mainData.mainRain}`;
 cityImg.src = '/images/bucharest.jpg';
 
 //* Generate all hourly HTML data:
-for (let i = 0; i < 6; i++) {
+for (let i = 6; i > 0; i--) {
 	hourly.insertAdjacentHTML(
 		'afterend',
 		`<div class="hour--conditions">
-    <h3 class="hour">y am</h3>
-    <object data="/images/few-clouds.svg" type="image/svg+xml" class="hour--image"></object>
-    <h2 class="hour--degrees">15°</h2>
+    <h3 class="hour" id=hourly-${i}>y am</h3>
+    <object data="/images/few-clouds.svg" type="image/svg+xml" class="hour--image" id="hourly__image--${i}"></object>
+    <h2 class="hour--degrees" id="hourly__degrees--${i}">15°</h2>
     <div class="hour--rain">
         <object data="/images/rain-logo.svg" type="image/svg+xml" class="hour--rain__icon"></object>
         <h3 class="hour--precipitation">50%</h3>
@@ -211,6 +211,7 @@ searchBtn.forEach((x) => {
 
 		const yesterdayData = await getYesterdayData();
 		updateSunriseSunsetDiff(yesterdayData);
+		console.log(weatherData);
 
 		updateData();
 
@@ -323,12 +324,21 @@ const updateTodayWeather = async (data) => {
 	highlightsData.visibility = data.current.visibility;
 	highlightsData.sunrise = fromEpochToData(data.current.sunrise, data.timezone_offset);
 	highlightsData.sunset = fromEpochToData(data.current.sunset, data.timezone_offset);
+	highlightsData.mainTemp = fromKelvinToCelsius(data.current.temp);
+	highlightsData.mainCondition = capitalizeWords(data.current.weather[0].description);
+	highlightsData.mainDegreesRange = `${fromKelvinToCelsius(data.daily[0].temp.max)}° / ${fromKelvinToCelsius(data.daily[0].temp.min)}°`;
+	highlightsData.mainRain = fromhPaTommHg(data.current.pressure);
+	for (let i = 0; i < 7; i++) {
+		hourlyData.hourlyTimes[i] = fromEpochToData(data.hourly[i * 3].dt, data.timezone_offset).slice(0, -3);
+		hourlyData.hourlyTemperatures[i] = `${fromKelvinToCelsius(data.hourly[i * 3].temp)}°`;
+	}
 
-	modifyWindDirection(highlightsData.windDirection);
 	modifyUVIndex(highlightsData.uvIndex);
 	modifyHumidity(highlightsData.humidity);
 	modifyVisibility(highlightsData.visibility);
 	modifySunriseSunset(highlightsData.sunrise.slice(0, 5), highlightsData.sunset.slice(0, 5));
+	modifyTodayConditions();
+	modifyTodayData();
 };
 
 const fromEpochToData = (epochTime, timezone) => {
@@ -473,4 +483,39 @@ const updateSunriseSunsetDiff = async (yesterdayData) => {
 	Math.abs(sunsetDiff) > 59
 		? (sunsetDifference.textContent = `${Math.trunc(sunsetDiff / 60)}m ${Math.abs(sunsetDiff % 60)}s`)
 		: (sunsetDifference.textContent = `${sunsetDiff}s`);
+};
+
+const fromKelvinToCelsius = (temp) => {
+	return Math.round(temp - 273.15);
+};
+
+const modifyTodayConditions = async () => {
+	mainTemp.innerHTML = `${highlightsData.mainTemp}°<sup>C</sup>`;
+	mainCondition.innerHTML = highlightsData.mainCondition;
+	mainDegreesRange.innerHTML = highlightsData.mainDegreesRange;
+	mainRain.textContent = `${highlightsData.mainRain} mmHg`;
+};
+
+const capitalizeWords = (phrase) => {
+	let words = phrase.split(' ');
+	for (let i = 0; i < words.length; i++) {
+		words[i] = words[i][0].toUpperCase() + words[i].substr(1);
+	}
+	words = words.join(' ');
+	return words;
+};
+
+const fromhPaTommHg = (pressure) => {
+	return Math.round(pressure / 1.33322387415);
+};
+
+const modifyTodayData = async () => {
+	for (let i = 0; i < 7; i++) {
+		let timesHour = document.querySelector(`#hourly-${i}`);
+		let hourlyImage = document.querySelector(`#hourly__image--${i}`);
+		let hourlyDegrees = document.querySelector(`#hourly__degrees--${i}`);
+
+		timesHour.textContent = hourlyData.hourlyTimes[i];
+		hourlyDegrees.textContent = hourlyData.hourlyTemperatures[i];
+	}
 };

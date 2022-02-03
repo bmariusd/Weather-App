@@ -959,6 +959,7 @@ body {
 
 	.rain img {
 		display: block;
+		padding-left: 0.5em;
 	}
 
 	.hour--weather__desktop {
