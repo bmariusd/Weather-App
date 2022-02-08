@@ -110,19 +110,15 @@ for (let i = 6; i > 0; i--) {
 		'afterend',
 		`<div class="hour--conditions">
     <h3 class="hour" id=hourly-${i}>y am</h3>
-    <object data="/images/few-clouds.svg" type="image/svg+xml" class="hour--image" id="hourly__image--${i}"></object>
+    <img src="http://openweathermap.org/img/wn/10d@2x.png" alt="" class="hour--image" id="hourly__image--${i}">
     <h2 class="hour--degrees" id="hourly__degrees--${i}">15°</h2>
-    <div class="hour--rain">
-        <object data="/images/rain-logo.svg" type="image/svg+xml" class="hour--rain__icon"></object>
-        <h3 class="hour--precipitation">50%</h3>
-    </div>
     </div>`
 	);
 
 	weeklyConditions.insertAdjacentHTML(
 		'afterend',
 		`<div class="weekly__conditions">
-		<h3 class="desktop--weekly">x am</h3>
+		<h3 class="desktop--weekly" id="weekly-${i}">x am</h3>
 		<object data="/images/few-clouds.svg" type="image/svg+xml" class="desktop--weekly__image"></object>
 		<h2 class="desktop--weekly__degrees">15°</h2>
 		<div class="weekly--rain">
@@ -165,12 +161,12 @@ const desktopWeeklyImage = document.querySelectorAll('.desktop--weekly__image');
 
 //* Change today hourly and weekly data from API!
 for (let i = 0; i < 7; i++) {
-	hourCondition[i].textContent = hourlyData.hourlyTimes[i];
-	hourDegrees[i].textContent = hourlyData.hourlyTemperatures[i];
-	hourImage[i].setAttribute('data', `/images/${hourlyData.hourlyImages[0]}.svg`);
-	hourRain[i].textContent = hourlyData.hourlyRain[i];
+	// hourCondition[i].textContent = hourlyData.hourlyTimes[i];
+	// hourDegrees[i].textContent = hourlyData.hourlyTemperatures[i];
+	// hourImage[i].setAttribute('data', `/images/${hourlyData.hourlyImages[0]}.svg`);
+	// hourRain[i].textContent = hourlyData.hourlyRain[i];
 
-	weeklyDay[i].textContent = weeklyData.weeklyDays[i];
+	// weeklyDay[i].textContent = weeklyData.weeklyDays[i];
 	weeklyDegrees[i].textContent = weeklyData.weeklyTemperatures[i];
 	weeklyImage[i].setAttribute('data', `/images/${weeklyData.weeklyImages[0]}.svg`);
 	weeklyRain[i].textContent = weeklyData.weeklyRain[i];
@@ -182,13 +178,8 @@ for (let i = 0; i < 7; i++) {
 
 sunrise.textContent = highlightsData.sunrise;
 sunset.textContent = highlightsData.sunset;
-// TODO Difference before yesterday sunrise/sunset and today sunrise/sunset
 sunriseDifference.textContent = '-3m 25s';
 sunsetDifference.textContent = '+1m 10s';
-
-// TODO Normal / emoticons to change based on the value of humididy
-
-// TODO Average / emoticons to change based on the value of visibility
 
 searchBtn.forEach((x) => {
 	x.addEventListener('click', () => {
@@ -205,7 +196,6 @@ searchBtn.forEach((x) => {
 		lon = data[0].lon;
 		const airPolutionData = await airPolution();
 		highlightsData.airQualityIndex = airPolutionData.list[0].main.aqi;
-
 		const weatherData = await getWeatherData();
 		updateTodayWeather(weatherData);
 
@@ -217,7 +207,7 @@ searchBtn.forEach((x) => {
 
 		let photoRef = '';
 
-		// getPhoto();
+		//getPhoto();
 
 		userInput[0].value = '';
 		loadingImage.classList.add('hide');
@@ -322,20 +312,23 @@ const updateTodayWeather = async (data) => {
 	highlightsData.uvIndex = Math.round(data.daily[0].uvi);
 	highlightsData.humidity = data.current.humidity;
 	highlightsData.visibility = data.current.visibility;
-	highlightsData.sunrise = fromEpochToData(data.current.sunrise, data.timezone_offset);
-	highlightsData.sunset = fromEpochToData(data.current.sunset, data.timezone_offset);
+	highlightsData.sunrise = fromEpochToData(data.current.sunrise, data.timezone_offset).date.slice(17, 22);
+	highlightsData.sunset = fromEpochToData(data.current.sunset, data.timezone_offset).date.slice(17, 22);
 	highlightsData.mainTemp = fromKelvinToCelsius(data.current.temp);
 	highlightsData.mainCondition = capitalizeWords(data.current.weather[0].description);
 	highlightsData.mainDegreesRange = `${fromKelvinToCelsius(data.daily[0].temp.max)}° / ${fromKelvinToCelsius(data.daily[0].temp.min)}°`;
 	highlightsData.mainRain = fromhPaTommHg(data.current.pressure);
 	for (let i = 0; i < 7; i++) {
-		hourlyData.hourlyTimes[i] = fromEpochToData(data.hourly[i * 3].dt, data.timezone_offset).slice(0, -3);
+		hourlyData.hourlyTimes[i] = fromEpochToData(data.hourly[i * 3].dt, data.timezone_offset).date.slice(17, 22);
 		hourlyData.hourlyTemperatures[i] = `${fromKelvinToCelsius(data.hourly[i * 3].temp)}°`;
+		hourlyData.hourlyImages[i] = `${data.daily[i].weather[0].id}`;
+		weeklyData.weeklyDays[i] = fromEpochToData(data.daily[i].dt, data.timezone_offset).dayOfWeek;
 	}
 
 	modifyUVIndex(highlightsData.uvIndex);
 	modifyHumidity(highlightsData.humidity);
 	modifyVisibility(highlightsData.visibility);
+	console.log(highlightsData.sunrise);
 	modifySunriseSunset(highlightsData.sunrise.slice(0, 5), highlightsData.sunset.slice(0, 5));
 	modifyTodayConditions();
 	modifyTodayData();
@@ -344,9 +337,12 @@ const updateTodayWeather = async (data) => {
 const fromEpochToData = (epochTime, timezone) => {
 	let date = new Date(0);
 	date.setUTCSeconds(epochTime + timezone);
-	date = date.toUTCString();
-	let hours = date.slice(-12, -4);
-	return hours;
+	date = date.toUTCString().toLocaleString();
+
+	let dayOfWeek = new Date(date);
+	dayOfWeek = dayOfWeek.toLocaleString('en-US', { weekday: 'long' });
+
+	return { date, dayOfWeek };
 };
 
 const modifyWindDirection = async (wind) => {
@@ -461,8 +457,8 @@ const modifySunriseSunset = async (sunriseValue, sunsetValue) => {
 const updateSunriseSunsetDiff = async (yesterdayData) => {
 	const todaySunrise = highlightsData.sunrise;
 	const todaySunset = highlightsData.sunset;
-	const yesterdaySunrise = fromEpochToData(yesterdayData.current.sunrise, yesterdayData.timezone_offset);
-	const yesterdaySunset = fromEpochToData(yesterdayData.current.sunset, yesterdayData.timezone_offset);
+	const yesterdaySunrise = fromEpochToData(yesterdayData.current.sunrise, yesterdayData.timezone_offset).date.slice(17, 25);
+	const yesterdaySunset = fromEpochToData(yesterdayData.current.sunset, yesterdayData.timezone_offset).date.slice(17, 25);
 
 	let sunriseDiff =
 		todaySunrise.slice(0, 2) * 3600 +
@@ -514,8 +510,46 @@ const modifyTodayData = async () => {
 		let timesHour = document.querySelector(`#hourly-${i}`);
 		let hourlyImage = document.querySelector(`#hourly__image--${i}`);
 		let hourlyDegrees = document.querySelector(`#hourly__degrees--${i}`);
+		let weeklyDay = document.querySelector(`#weekly-${i}`);
 
 		timesHour.textContent = hourlyData.hourlyTimes[i];
 		hourlyDegrees.textContent = hourlyData.hourlyTemperatures[i];
+		let weatherId = hourlyData.hourlyImages[i];
+		switch (true) {
+			case weatherId >= 802:
+				hourlyImage.setAttribute('src', `/images/broken-clouds.png`);
+				break;
+			case weatherId == 801:
+				hourlyImage.setAttribute('src', `/images/few-clouds.png`);
+				break;
+			case weatherId == 800:
+				hourlyImage.setAttribute('src', `/images/clear.png`);
+				break;
+			case weatherId >= 700:
+				hourlyImage.setAttribute('src', `/images/fog.png`);
+				break;
+			case weatherId >= 601:
+				hourlyImage.setAttribute('src', `/images/snow.png`);
+				break;
+			case weatherId == 600:
+				hourlyImage.setAttribute('src', `/images/light-snow.png`);
+				break;
+			case weatherId >= 512:
+				hourlyImage.setAttribute('src', `/images/shower-rain.png`);
+				break;
+			case weatherId >= 502:
+				hourlyImage.setAttribute('src', `/images/heavy-rain.png`);
+				break;
+			case weatherId >= 300:
+				hourlyImage.setAttribute('src', `/images/light-rain.png`);
+				break;
+			case weatherId >= 210 && weatherId <= 221:
+				hourlyImage.setAttribute('src', `/images/thunderstorm.png`);
+				break;
+			case weatherId >= 200:
+				hourlyImage.setAttribute('src', `/images/thunderstorm-rain.png`);
+				break;
+		}
+		weeklyDay.textContent = weeklyData.weeklyDays[i];
 	}
 };
