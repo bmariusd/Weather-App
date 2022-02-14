@@ -45,8 +45,11 @@ const sunriseDifference = document.querySelector('.highlight--value__sunrise__di
 const sunsetDifference = document.querySelector('.highlight--value__sunset__difference');
 const humidity = document.querySelector('.highlight--value__humidity');
 const humidityBar = document.querySelector('.humidity--progress__bar');
+const humidityDescription = document.querySelector('#humidity--description');
 const visibility = document.querySelector('.highlight--value__visibility');
+const visibilityDescription = document.querySelector('#visibility--description');
 const airQualityIndex = document.querySelector('.highlight--value__aqi');
+const aqiDescription = document.querySelector('#aqi--description');
 const aqiBar = document.querySelector('.aqi--progress__bar');
 
 //* SEARCH AND INPUT QUERY SELECTORS:
@@ -65,6 +68,7 @@ const mainData = {
 	mainCondition: `Heavy Snow`,
 	mainDegreesRange: `10°/-2°`,
 	mainRain: `78%`,
+	celsiusFahrenheit: 'Celsius',
 };
 
 // TODO after I get the data from the API
@@ -119,8 +123,8 @@ for (let i = 6; i > 0; i--) {
 		'afterend',
 		`<div class="weekly__conditions">
 		<h3 class="desktop--weekly" id="weekly-${i}">x am</h3>
-		<object data="/images/few-clouds.svg" type="image/svg+xml" class="desktop--weekly__image"></object>
-		<h2 class="desktop--weekly__degrees">15°</h2>
+		<img src="/images/few-clouds.png" alt="weekly-image" class="desktop--weekly__image" id="weekly__image--${i}">
+		<h2 class="desktop--weekly__degrees" id="weekly__degrees--${i}">15°</h2>
 		<div class="weekly--rain">
 			<object data="/images/rain-logo.svg" type="image/svg+xml" class="weekly--rain__icon"></object>
 			<h3 class="desktop--weekly__precipitation">50%</h3>
@@ -203,6 +207,7 @@ searchBtn.forEach((x) => {
 		updateSunriseSunsetDiff(yesterdayData);
 		console.log(weatherData);
 
+		modifyAQI();
 		updateData();
 
 		let photoRef = '';
@@ -298,10 +303,6 @@ const getYesterdayData = async () => {
 };
 
 const updateData = async () => {
-	airQualityIndex.textContent = highlightsData.airQualityIndex;
-	aqiBar.style.setProperty('--position', `${134.5 - highlightsData.airQualityIndex * 26.5}px`);
-	// TODO Average / emoticons to change based on the value of air quality index
-
 	windValue.innerHTML = `${highlightsData.windStatus} <sub>km/h</sub>`;
 	uvIndex.textContent = highlightsData.uvIndex;
 };
@@ -322,13 +323,17 @@ const updateTodayWeather = async (data) => {
 		hourlyData.hourlyTimes[i] = fromEpochToData(data.hourly[i * 3].dt, data.timezone_offset).date.slice(17, 22);
 		hourlyData.hourlyTemperatures[i] = `${fromKelvinToCelsius(data.hourly[i * 3].temp)}°`;
 		hourlyData.hourlyImages[i] = `${data.daily[i].weather[0].id}`;
-		weeklyData.weeklyDays[i] = fromEpochToData(data.daily[i].dt, data.timezone_offset).dayOfWeek;
+		weeklyData.weeklyDays[i] = fromEpochToData(data.daily[i + 1].dt, data.timezone_offset).dayOfWeek;
+		weeklyData.weeklyTemperatures[i] = `${fromKelvinToCelsius(data.daily[i + 1].temp.min)}°/${fromKelvinToCelsius(
+			data.daily[i + 1].temp.max
+		)}°`;
+		weeklyData.weeklyImages[i] = `${data.daily[i + 1].weather[0].id}`;
 	}
 
+	updateWeatherIcons(data.daily[0].weather[0].id, mainWeather);
 	modifyUVIndex(highlightsData.uvIndex);
 	modifyHumidity(highlightsData.humidity);
 	modifyVisibility(highlightsData.visibility);
-	console.log(highlightsData.sunrise);
 	modifySunriseSunset(highlightsData.sunrise.slice(0, 5), highlightsData.sunset.slice(0, 5));
 	modifyTodayConditions();
 	modifyTodayData();
@@ -443,10 +448,43 @@ const modifyUVIndex = async (value) => {
 const modifyHumidity = async (value) => {
 	humidity.innerHTML = `${value} <sup>%</sup>`;
 	humidityBar.style.setProperty('--height', highlightsData.humidity);
+
+	if (value > 66) {
+		humidityDescription.textContent = 'Too Moist 😟';
+	} else if (value > 33) {
+		humidityDescription.textContent = 'Optimum 😁';
+	} else {
+		humidityDescription.textContent = 'Too Dry 😢';
+	}
+};
+
+const modifyAQI = async () => {
+	airQualityIndex.textContent = highlightsData.airQualityIndex;
+	aqiBar.style.setProperty('--position', `${134.5 - highlightsData.airQualityIndex * 26.5}px`);
+
+	if (highlightsData.airQualityIndex > 4) {
+		aqiDescription.textContent = 'Very poor 😨';
+	} else if (highlightsData.airQualityIndex > 3) {
+		aqiDescription.textContent = 'Poor 🙁';
+	} else if (highlightsData.airQualityIndex > 2) {
+		aqiDescription.textContent = 'Moderate 😐';
+	} else if (highlightsData.airQualityIndex > 1) {
+		aqiDescription.textContent = 'Fair 🙂';
+	} else {
+		aqiDescription.textContent = 'Good 😁';
+	}
 };
 
 const modifyVisibility = async (value) => {
 	visibility.innerHTML = `${value / 1000} <sub>km</sub>`;
+
+	if (value > 6.6) {
+		visibilityDescription.textContent = 'Very good 😁';
+	} else if (value > 3.3) {
+		visibilityDescription.textContent = 'Normal 🙂';
+	} else {
+		visibilityDescription.textContent = 'Poor 😢';
+	}
 };
 
 const modifySunriseSunset = async (sunriseValue, sunsetValue) => {
@@ -511,45 +549,55 @@ const modifyTodayData = async () => {
 		let hourlyImage = document.querySelector(`#hourly__image--${i}`);
 		let hourlyDegrees = document.querySelector(`#hourly__degrees--${i}`);
 		let weeklyDay = document.querySelector(`#weekly-${i}`);
+		let weeklyDegrees = document.querySelector(`#weekly__degrees--${i}`);
+		let weeklyImage = document.querySelector(`#weekly__image--${i}`);
 
 		timesHour.textContent = hourlyData.hourlyTimes[i];
 		hourlyDegrees.textContent = hourlyData.hourlyTemperatures[i];
 		let weatherId = hourlyData.hourlyImages[i];
-		switch (true) {
-			case weatherId >= 802:
-				hourlyImage.setAttribute('src', `/images/broken-clouds.png`);
-				break;
-			case weatherId == 801:
-				hourlyImage.setAttribute('src', `/images/few-clouds.png`);
-				break;
-			case weatherId == 800:
-				hourlyImage.setAttribute('src', `/images/clear.png`);
-				break;
-			case weatherId >= 700:
-				hourlyImage.setAttribute('src', `/images/fog.png`);
-				break;
-			case weatherId >= 601:
-				hourlyImage.setAttribute('src', `/images/snow.png`);
-				break;
-			case weatherId == 600:
-				hourlyImage.setAttribute('src', `/images/light-snow.png`);
-				break;
-			case weatherId >= 512:
-				hourlyImage.setAttribute('src', `/images/shower-rain.png`);
-				break;
-			case weatherId >= 502:
-				hourlyImage.setAttribute('src', `/images/heavy-rain.png`);
-				break;
-			case weatherId >= 300:
-				hourlyImage.setAttribute('src', `/images/light-rain.png`);
-				break;
-			case weatherId >= 210 && weatherId <= 221:
-				hourlyImage.setAttribute('src', `/images/thunderstorm.png`);
-				break;
-			case weatherId >= 200:
-				hourlyImage.setAttribute('src', `/images/thunderstorm-rain.png`);
-				break;
-		}
+		updateWeatherIcons(weatherId, hourlyImage);
+
 		weeklyDay.textContent = weeklyData.weeklyDays[i];
+		weeklyDegrees.textContent = weeklyData.weeklyTemperatures[i];
+		weatherId = weeklyData.weeklyImages[i];
+		updateWeatherIcons(weatherId, weeklyImage);
+	}
+};
+
+const updateWeatherIcons = (weatherId, imageToChange) => {
+	switch (true) {
+		case weatherId >= 802:
+			imageToChange.setAttribute('src', `/images/broken-clouds.png`);
+			break;
+		case weatherId == 801:
+			imageToChange.setAttribute('src', `/images/few-clouds.png`);
+			break;
+		case weatherId == 800:
+			imageToChange.setAttribute('src', `/images/clear.png`);
+			break;
+		case weatherId >= 700:
+			imageToChange.setAttribute('src', `/images/fog.png`);
+			break;
+		case weatherId >= 601:
+			imageToChange.setAttribute('src', `/images/snow.png`);
+			break;
+		case weatherId == 600:
+			imageToChange.setAttribute('src', `/images/light-snow.png`);
+			break;
+		case weatherId >= 512:
+			imageToChange.setAttribute('src', `/images/shower-rain.png`);
+			break;
+		case weatherId >= 502:
+			imageToChange.setAttribute('src', `/images/heavy-rain.png`);
+			break;
+		case weatherId >= 300:
+			imageToChange.setAttribute('src', `/images/light-rain.png`);
+			break;
+		case weatherId >= 210 && weatherId <= 221:
+			imageToChange.setAttribute('src', `/images/thunderstorm.png`);
+			break;
+		case weatherId >= 200:
+			imageToChange.setAttribute('src', `/images/thunderstorm-rain.png`);
+			break;
 	}
 };

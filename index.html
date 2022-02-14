@@ -20,10 +20,10 @@
 			<section class="today--weather">
 				<h2 class="today--date"><span>Saturday</span>, 17 October 2021</h2>
 				<div class="today--conditions">
-					<object data="/images/thunderstorm.svg" type="image/svg+xml" class="today--icon"></object>
+					<img src="/images/thunderstorm.png" alt="today weather icon" class="today--icon">
 					<h1 class="today--degrees">12°<sup>C</sup></h1>
 					<div class="today--details">
-						<div class="conditions"><object data="/images/few-clouds.svg" type="image/svg+xml" class="hour--weather__desktop"></object><h3 class="conditions__text">Mostly Cloudy</h3></div>
+						<div class="conditions"><img src="/images/few-clouds.png" alt="icon conditions" class="hour--weather__desktop"><h3 class="conditions__text">Mostly Cloudy</h3></div>
 						<div class="degrees"><img src="/images/min-max.svg" alt="" /><h3 class="degrees__text">12°/-2°</h3></div>
 						<div class="rain"><img src="/images/pressure-desktop.svg" alt="" /><h3 class="rain__text">1000 mm Hg</h3></div>
 					</div>
@@ -54,10 +54,11 @@
 				<div class="desktop--weekly__conditions">
 					<div class="weekly__conditions">
 						<h3 class="desktop--weekly" id="weekly-0">x am</h3>
-						<object data="/images/few-clouds.svg" type="image/svg+xml" class="desktop--weekly__image"></object>
-						<h2 class="desktop--weekly__degrees">15°</h2>
+						<!-- <object data="/images/few-clouds.svg" type="image/svg+xml" class="desktop--weekly__image" id=""></object> -->
+						<img src="/images/few-clouds.png" alt="weekly-image" class="desktop--weekly__image" id="weekly__image--0">
+						<h2 class="desktop--weekly__degrees" id="weekly__degrees--0">15°</h2>
 						<div class="weekly--rain">
-							<object data="/images/rain-logo.svg" type="image/svg+xml" class="weekly--rain__icon"></object>
+							<object data="/images/rain-logo.svg" type="image/svg+xml" class="weekly--rain__icon" ></object>
 							<h3 class="desktop--weekly__precipitation">50%</h3>
 						</div>
 					</div>
@@ -120,7 +121,7 @@
 					<img src="/images/uv-index.svg" alt="" class="highlight--image__icon" />
 					<h2 class="highlight--name">Humidity</h2>
 					<h2 class="highlight--value highlight--value__humidity">25<sup>%</sup></h2>
-					<h3 class="highlight--description">Normal 🤙</h3>
+					<h3 class="highlight--description" id="humidity--description">Normal 🤙</h3>
 					<div class="humidity--progress__bar" style="--height: 25">
 
 					</div>
@@ -130,14 +131,14 @@
 					<img src="/images/uv-index.svg" alt="" class="highlight--image__icon" />
 					<h2 class="highlight--name">Visibility</h2>
 					<h2 class="highlight--value highlight--value__visibility">5.2 <sub>km</sub></h2>
-					<h3 class="highlight--description">Average 😐</h3>
+					<h3 class="highlight--description" id="visibility--description">Average 😐</h3>
 				</div>
 
 				<div class="highlights">
 					<img src="/images/uv-index.svg" alt="" class="highlight--image__icon" />
 					<h2 class="highlight--name">Air Quality Index</h2>
 					<h2 class="highlight--value highlight--value__aqi">1</h2>
-					<h3 class="highlight--description">Good 😀</h3>
+					<h3 class="highlight--description" id="aqi--description">Good 😀</h3>
 					<div class="aqi--progress__bar" style="--position: 108px">
 
 					</div>
