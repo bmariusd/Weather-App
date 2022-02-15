@@ -19,7 +19,7 @@
 
 			<section class="today--weather">
 				<h2 class="today--date"><span>Saturday</span>, 17 October 2021</h2>
-				<div class="today--conditions">
+				<div class="today--conditions no--display">
 					<img src="/images/thunderstorm.png" alt="today weather icon" class="today--icon">
 					<h1 class="today--degrees">12°<sup>C</sup></h1>
 					<div class="today--details">
@@ -33,13 +33,16 @@
 					<input type="search" name="" id="" class="nav--search__name" placeholder="Search for places . . .">
 					<button class='main--search__btn'><span>+</span></button>
 				</div>
-				<div class="main--city">
+				<div class="main--city no--display">
 					<img src="/images/new-york.jpg" alt="" class="main--city__img">
 					<h2 class="main--city__name">New York, <span class="country">USA</span></h2>
 				</div>
+				<div class="search--city">
+					<h2>Please search for a city!</h2>
+				</div>
 			</section>
 
-			<section class="hourly--weather active">
+			<section class="hourly--weather active no--display">
 				<div class="today--hourly__conditions">
 					<div class="hour--conditions">
 						<h3 class="hour" id="hourly-0">x am</h3>
@@ -65,7 +68,7 @@
 				</div>
 			</section>
 
-			<section class="today--highlights">
+			<section class="today--highlights no--display">
 				<div class="highlights">
 					<img src="/images/uv-index.svg" alt="" class="highlight--image__icon" />
 					<h2 class="highlight--name">UV Index</h2>
@@ -157,17 +160,17 @@
 				</div>
 			</section>
 
-			<section class="main--highlights">
+			<section class="main--highlights no--display">
 				<h3 class="highlights__text">Today's Highlights</h3>
 			</section>
 
 			<nav class="main--navbar">
 
-				<button class="today active">
+				<button class="today active no--display">
 					<img src="/images/today.svg" alt="" class="nav--today__icon" />
 					<h3 class="nav--today__name">Today</h3>
 				</button>
-				<button class="weekly">
+				<button class="weekly no--display">
 					<img src="/images/weekly.svg" alt="" class="nav--weekly__icon" />
 					<h3 class="nav--weekly__name">Weekly</h3>
 				</button>

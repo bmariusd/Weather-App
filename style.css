@@ -964,7 +964,7 @@ body {
 
 	.hour--weather__desktop {
 		display: block;
-		height: 30px;
+		height: 25px;
 		padding-right: 0.5em;
 	}
 
@@ -1655,4 +1655,8 @@ body {
 	100% {
 		height: 0%;
 	}
+}
+
+.no--display {
+	display: none;
 }

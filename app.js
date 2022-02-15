@@ -7,6 +7,7 @@ let lon = '';
 
 //* Loading . . .
 const loadingImage = document.querySelector('.loader-wrapper');
+const noDisplay = document.querySelectorAll('.no--display');
 
 //* MAIN DETAILS QUERY SELECTORS:
 const mainDate = document.querySelector('.today--date');
@@ -64,9 +65,15 @@ const mobileSearch = document.querySelector('.mobile--search');
 const mainData = {
 	mainDate: new Date(),
 	mainWeather: `few-clouds`,
-	mainTemp: '10°',
+	mainTemp: {
+		celsius: '10°',
+		fahrenheit: '60°',
+	},
 	mainCondition: `Heavy Snow`,
-	mainDegreesRange: `10°/-2°`,
+	mainDegreesRange: {
+		celsius: `10°/-2°`,
+		fahrenheit: `50°/42°`,
+	},
 	mainRain: `78%`,
 	celsiusFahrenheit: 'Celsius',
 };
@@ -74,7 +81,10 @@ const mainData = {
 // TODO after I get the data from the API
 const hourlyData = {
 	hourlyTimes: ['3 am', '6 am', '9 am', '12 pm', '3 pm', '6 pm', '9 pm'],
-	hourlyTemperatures: ['10°', '11°', '12°', '13°', '14°', '15°', '16°'],
+	hourlyTemperatures: {
+		celsius: ['10°', '11°', '12°', '13°', '14°', '15°', '16°'],
+		fahrenheit: ['60°', '61°', '62°', '63°', '64°', '65°', '66°'],
+	},
 	hourlyRain: ['10%', '15%', '20%', '25%', '30%', '35%', '40%'],
 	hourlyImages: ['thunderstorm', 'scattered-clouds', 'few-clouds', '25%', '30%', '35%', '40%'],
 };
@@ -82,7 +92,10 @@ const hourlyData = {
 // TODO after I get the data from the API
 const weeklyData = {
 	weeklyDays: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-	weeklyTemperatures: ['0° / 10°', '1° / 11°', '2° / 12°', '3° / 13°', '4° / 14°', '5° / 15°', '6° / 16°'],
+	weeklyTemperatures: {
+		celsius: ['0° / 10°', '1° / 11°', '2° / 12°', '3° / 13°', '4° / 14°', '5° / 15°', '6° / 16°'],
+		fahrenheit: ['50° / 60°', '51° / 61°', '52° / 62°', '53° / 63°', '54° / 64°', '55° / 65°', '56° / 66°'],
+	},
 	weeklyRain: ['10%', '15%', '20%', '25%', '30%', '35%', '40%'],
 	weeklyImages: ['thunderstorm', 'scattered-clouds', 'few-clouds', '25%', '30%', '35%', '40%'],
 };
@@ -191,6 +204,10 @@ searchBtn.forEach((x) => {
 	});
 
 	x.addEventListener('click', async () => {
+		noDisplay.forEach((x) => {
+			x.classList.remove('no--display');
+		});
+
 		todayNavbar.classList.add('active--grid');
 		weeklyNavbar.classList.add('active--grid');
 		mobileSearch.classList.add('active');
@@ -222,6 +239,13 @@ searchBtn.forEach((x) => {
 //*TODO */
 celsiusFahrenheit.addEventListener('click', () => {
 	celsiusFahrenheit.classList.toggle('active');
+	if (celsiusFahrenheit.classList.contains('active')) {
+		mainData.celsiusFahrenheit = 'Fahrenheit';
+	} else {
+		mainData.celsiusFahrenheit = 'Celsius';
+	}
+	modifyTodayConditions();
+	modifyTodayData();
 });
 
 todayBtn.addEventListener('click', () => {
@@ -315,16 +339,22 @@ const updateTodayWeather = async (data) => {
 	highlightsData.visibility = data.current.visibility;
 	highlightsData.sunrise = fromEpochToData(data.current.sunrise, data.timezone_offset).date.slice(17, 22);
 	highlightsData.sunset = fromEpochToData(data.current.sunset, data.timezone_offset).date.slice(17, 22);
-	highlightsData.mainTemp = fromKelvinToCelsius(data.current.temp);
-	highlightsData.mainCondition = capitalizeWords(data.current.weather[0].description);
-	highlightsData.mainDegreesRange = `${fromKelvinToCelsius(data.daily[0].temp.max)}° / ${fromKelvinToCelsius(data.daily[0].temp.min)}°`;
-	highlightsData.mainRain = fromhPaTommHg(data.current.pressure);
+	mainData.mainTemp.celsius = fromKelvinToCelsius(data.current.temp);
+	mainData.mainTemp.fahrenheit = fromKelvinToFahrenheit(data.current.temp);
+	mainData.mainCondition = capitalizeWords(data.current.weather[0].description);
+	mainData.mainDegreesRange.celsius = `${fromKelvinToCelsius(data.daily[0].temp.max)}° / ${fromKelvinToCelsius(data.daily[0].temp.min)}°`;
+	mainData.mainDegreesRange.fahrenheit = `${fromKelvinToFahrenheit(data.daily[0].temp.max)}° / ${fromKelvinToFahrenheit(data.daily[0].temp.min)}°`;
+	mainData.mainRain = fromhPaTommHg(data.current.pressure);
 	for (let i = 0; i < 7; i++) {
 		hourlyData.hourlyTimes[i] = fromEpochToData(data.hourly[i * 3].dt, data.timezone_offset).date.slice(17, 22);
-		hourlyData.hourlyTemperatures[i] = `${fromKelvinToCelsius(data.hourly[i * 3].temp)}°`;
+		hourlyData.hourlyTemperatures.celsius[i] = `${fromKelvinToCelsius(data.hourly[i * 3].temp)}°`;
+		hourlyData.hourlyTemperatures.fahrenheit[i] = `${fromKelvinToFahrenheit(data.hourly[i * 3].temp)}°`;
 		hourlyData.hourlyImages[i] = `${data.daily[i].weather[0].id}`;
 		weeklyData.weeklyDays[i] = fromEpochToData(data.daily[i + 1].dt, data.timezone_offset).dayOfWeek;
-		weeklyData.weeklyTemperatures[i] = `${fromKelvinToCelsius(data.daily[i + 1].temp.min)}°/${fromKelvinToCelsius(
+		weeklyData.weeklyTemperatures.celsius[i] = `${fromKelvinToCelsius(data.daily[i + 1].temp.min)}°/${fromKelvinToCelsius(
+			data.daily[i + 1].temp.max
+		)}°`;
+		weeklyData.weeklyTemperatures.fahrenheit[i] = `${fromKelvinToFahrenheit(data.daily[i + 1].temp.min)}°/${fromKelvinToFahrenheit(
 			data.daily[i + 1].temp.max
 		)}°`;
 		weeklyData.weeklyImages[i] = `${data.daily[i + 1].weather[0].id}`;
@@ -523,11 +553,21 @@ const fromKelvinToCelsius = (temp) => {
 	return Math.round(temp - 273.15);
 };
 
+const fromKelvinToFahrenheit = (temp) => {
+	return Math.round(temp * 1.8 - 459.67);
+};
+
 const modifyTodayConditions = async () => {
-	mainTemp.innerHTML = `${highlightsData.mainTemp}°<sup>C</sup>`;
-	mainCondition.innerHTML = highlightsData.mainCondition;
-	mainDegreesRange.innerHTML = highlightsData.mainDegreesRange;
-	mainRain.textContent = `${highlightsData.mainRain} mmHg`;
+	if (mainData.celsiusFahrenheit === 'Celsius') {
+		mainTemp.innerHTML = `${mainData.mainTemp.celsius}°<sup>C</sup>`;
+		mainDegreesRange.innerHTML = mainData.mainDegreesRange.celsius;
+	} else {
+		mainTemp.innerHTML = `${mainData.mainTemp.fahrenheit}°<sup>C</sup>`;
+		mainDegreesRange.innerHTML = mainData.mainDegreesRange.fahrenheit;
+	}
+	mainCondition.innerHTML = mainData.mainCondition;
+
+	mainRain.textContent = `${mainData.mainRain} mmHg`;
 };
 
 const capitalizeWords = (phrase) => {
@@ -553,14 +593,20 @@ const modifyTodayData = async () => {
 		let weeklyImage = document.querySelector(`#weekly__image--${i}`);
 
 		timesHour.textContent = hourlyData.hourlyTimes[i];
-		hourlyDegrees.textContent = hourlyData.hourlyTemperatures[i];
 		let weatherId = hourlyData.hourlyImages[i];
 		updateWeatherIcons(weatherId, hourlyImage);
 
 		weeklyDay.textContent = weeklyData.weeklyDays[i];
-		weeklyDegrees.textContent = weeklyData.weeklyTemperatures[i];
 		weatherId = weeklyData.weeklyImages[i];
 		updateWeatherIcons(weatherId, weeklyImage);
+
+		if (mainData.celsiusFahrenheit === 'Celsius') {
+			hourlyDegrees.textContent = hourlyData.hourlyTemperatures.celsius[i];
+			weeklyDegrees.textContent = weeklyData.weeklyTemperatures.celsius[i];
+		} else {
+			hourlyDegrees.textContent = hourlyData.hourlyTemperatures.fahrenheit[i];
+			weeklyDegrees.textContent = weeklyData.weeklyTemperatures.fahrenheit[i];
+		}
 	}
 };
 
