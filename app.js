@@ -8,6 +8,7 @@ let lon = '';
 //* Loading . . .
 const loadingImage = document.querySelector('.loader-wrapper');
 const noDisplay = document.querySelectorAll('.no--display');
+const searchForACity = document.querySelector('.search--city');
 
 //* MAIN DETAILS QUERY SELECTORS:
 const mainDate = document.querySelector('.today--date');
@@ -201,6 +202,7 @@ sunsetDifference.textContent = '+1m 10s';
 searchBtn.forEach((x) => {
 	x.addEventListener('click', () => {
 		loadingImage.classList.remove('hide');
+		searchForACity.classList.add('no--display');
 	});
 
 	x.addEventListener('click', async () => {
