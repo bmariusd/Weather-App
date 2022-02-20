@@ -38,11 +38,14 @@ const desktopWeekly = document.querySelector('.desktop--weekly__weather');
 const highlights = document.querySelector('.today--highlights');
 const uvIndex = document.querySelector('.uv-index');
 const uvIndexBar = document.querySelector('.bar');
+const uvIndexMobile = document.querySelector('.highlight--value__uv__index');
 const windValue = document.querySelector('.highlight--value__windstatus');
 const windDirection = document.querySelector('.wind--direction__text');
 const windDirectionImg = document.querySelector('.wind--direction__img');
 const sunrise = document.querySelector('.highlight--value__sunrise');
+const sunriseMobile = document.querySelector('.highlight--mobile__value__sunrise');
 const sunset = document.querySelector('.highlight--value__sunset');
+const sunsetMobile = document.querySelector('.highlight--mobile__value__sunset');
 const sunriseDifference = document.querySelector('.highlight--value__sunrise__difference');
 const sunsetDifference = document.querySelector('.highlight--value__sunset__difference');
 const humidity = document.querySelector('.highlight--value__humidity');
@@ -149,13 +152,9 @@ for (let i = 6; i > 0; i--) {
 	daily.insertAdjacentHTML(
 		'afterend',
 		`<div class="daily">
-					<h2 class="name">Saturday</h2>
-					<div class="daily--rain">
-						<img src="/images/rain-logo.svg" alt="" class="daily--rain__icon" />
-						<h3 class="daily--precipitation">35%</h3>
-					</div>
-					<object data="/images/shower-rain.svg" type="image/svg+xml" class="daily--image"></object>
-					<h2 class="daily--degrees">15°/3°</h2>
+					<h2 class="daily--name" id="daily--${i}">Saturday</h2>
+					<img src="/images/airqualityindex.svg" alt="" class="daily--image" id="daily__image--${i}"></img>
+					<h2 class="daily--degrees" id="daily__degrees--${i}">15°/3°</h2>
 				</div>`
 	);
 }
@@ -168,7 +167,7 @@ const hourRain = document.querySelectorAll('.hour--precipitation');
 
 //* WEEKLY HOURLY QUERY SELECTORS
 //* Mobile
-const weeklyDay = document.querySelectorAll('.name');
+const weeklyDay = document.querySelectorAll('.daily');
 const weeklyDegrees = document.querySelectorAll('.daily--degrees');
 const weeklyImage = document.querySelectorAll('.daily--image');
 const weeklyRain = document.querySelectorAll('.daily--precipitation');
@@ -187,7 +186,6 @@ for (let i = 0; i < 7; i++) {
 	// weeklyDay[i].textContent = weeklyData.weeklyDays[i];
 	weeklyDegrees[i].textContent = weeklyData.weeklyTemperatures[i];
 	weeklyImage[i].setAttribute('data', `/images/${weeklyData.weeklyImages[0]}.svg`);
-	weeklyRain[i].textContent = weeklyData.weeklyRain[i];
 
 	desktopWeeklyDay[i].textContent = weeklyDay[i].textContent;
 	desktopWeeklyDegrees[i].textContent = weeklyDegrees[i].textContent;
@@ -331,6 +329,14 @@ const getYesterdayData = async () => {
 const updateData = async () => {
 	windValue.innerHTML = `${highlightsData.windStatus} <sub>km/h</sub>`;
 	uvIndex.textContent = highlightsData.uvIndex;
+
+	if (highlightsData.uvIndex < 4) {
+		uvIndexMobile.textContent = `Good - ${highlightsData.uvIndex}`;
+	} else if (highlightsData.uvIndex < 7) {
+		uvIndexMobile.textContent = `High - ${highlightsData.uvIndex}`;
+	} else {
+		uvIndexMobile.textContent = `Extreme - ${highlightsData.uvIndex}`;
+	}
 };
 
 const updateTodayWeather = async (data) => {
@@ -521,7 +527,9 @@ const modifyVisibility = async (value) => {
 
 const modifySunriseSunset = async (sunriseValue, sunsetValue) => {
 	sunrise.innerHTML = sunriseValue;
+	sunriseMobile.innerHTML = sunriseValue;
 	sunset.innerHTML = sunsetValue;
+	sunsetMobile.innerHTML = sunsetValue;
 };
 
 const updateSunriseSunsetDiff = async (yesterdayData) => {
@@ -593,21 +601,28 @@ const modifyTodayData = async () => {
 		let weeklyDay = document.querySelector(`#weekly-${i}`);
 		let weeklyDegrees = document.querySelector(`#weekly__degrees--${i}`);
 		let weeklyImage = document.querySelector(`#weekly__image--${i}`);
+		let dailyDay = document.querySelector(`#daily--${i}`);
+		let dailyDegrees = document.querySelector(`#daily__degrees--${i}`);
+		let dailyImage = document.querySelector(`#daily__image--${i}`);
 
 		timesHour.textContent = hourlyData.hourlyTimes[i];
 		let weatherId = hourlyData.hourlyImages[i];
 		updateWeatherIcons(weatherId, hourlyImage);
 
 		weeklyDay.textContent = weeklyData.weeklyDays[i];
+		dailyDay.textContent = weeklyData.weeklyDays[i];
 		weatherId = weeklyData.weeklyImages[i];
 		updateWeatherIcons(weatherId, weeklyImage);
+		updateWeatherIcons(weatherId, dailyImage);
 
 		if (mainData.celsiusFahrenheit === 'Celsius') {
 			hourlyDegrees.textContent = hourlyData.hourlyTemperatures.celsius[i];
 			weeklyDegrees.textContent = weeklyData.weeklyTemperatures.celsius[i];
+			dailyDegrees.textContent = weeklyData.weeklyTemperatures.celsius[i];
 		} else {
 			hourlyDegrees.textContent = hourlyData.hourlyTemperatures.fahrenheit[i];
 			weeklyDegrees.textContent = weeklyData.weeklyTemperatures.fahrenheit[i];
+			dailyDegrees.textContent = weeklyData.weeklyTemperatures.fahrenheit[i];
 		}
 	}
 };

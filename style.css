@@ -127,6 +127,7 @@ body {
 
 .today--degrees {
 	font-size: 3em;
+	padding-left: 5%;
 }
 
 .today--degrees sup {
@@ -173,7 +174,7 @@ body {
 
 .hour {
 	margin: 0 auto 0 auto;
-	align-self: end;
+	align-self: start;
 }
 
 .hour--image {
@@ -193,7 +194,9 @@ body {
 .hour--degrees {
 	font-size: 16px;
 	font-weight: 500;
-	margin: auto;
+	margin: 0 auto 0 auto;
+	align-self: end;
+	padding-bottom: 10%;
 }
 
 .hour--weather__desktop {
@@ -293,6 +296,7 @@ body {
 }
 
 .highlight--mobile__value__sunrise,
+.highlight--mobile__value__sunset,
 .highlight--value__uv__index {
 	justify-self: flex-end;
 }
@@ -327,7 +331,7 @@ body {
 	display: grid;
 	grid-column: 1 / 5;
 	grid-template-rows: 1fr;
-	grid-template-columns: 1.5fr 0.75fr 0.9fr 0.9fr;
+	grid-template-columns: 1.5fr 0.1fr 0.7fr 0.9fr;
 	align-items: center;
 	padding-bottom: 0.25em;
 	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
@@ -336,18 +340,7 @@ body {
 .daily--image {
 	width: 40px;
 	grid-column: 3 / 4;
-	justify-self: center;
-}
-
-.daily--rain {
-	display: flex;
-	grid-column: 2 / 3;
-	font-size: 14px;
-}
-
-.daily--rain__icon {
-	width: 10px;
-	padding-right: 0.25em;
+	justify-self: start;
 }
 
 .daily--degrees {
@@ -580,7 +573,7 @@ body {
 
 	.hour {
 		margin: 0 auto 0 auto;
-		align-self: end;
+		align-self: start;
 	}
 
 	.hour--degrees {
@@ -588,21 +581,22 @@ body {
 	}
 
 	/** Today highlights data **/
+	.highlights:first-child {
+		grid-template-columns: 0.5fr 1.4fr 1.6fr;
+	}
+
 	.highlights {
 		font-size: 18px;
 	}
 
 	.highlight--image__icon {
 		height: 35px;
+		max-width: 35px;
 	}
 
 	/** Weekly data **/
 	.daily {
 		font-size: 18px;
-	}
-
-	.daily--rain {
-		font-size: 16px;
 	}
 
 	/** Navbar data **/
@@ -658,11 +652,14 @@ body {
 
 	.hour {
 		margin: 0 auto 0 auto;
-		align-self: end;
+		align-self: start;
+		padding-top: 30%;
 	}
 
 	.hour--degrees {
 		font-size: 20px;
+		align-self: end;
+		padding-bottom: 10%;
 	}
 
 	/** Today highlights data **/
@@ -687,10 +684,6 @@ body {
 	/** Weekly data **/
 	.daily {
 		font-size: 20px;
-	}
-
-	.daily--rain {
-		font-size: 18px;
 	}
 
 	/** Navbar data **/
@@ -789,6 +782,10 @@ body {
 		font-size: 30px;
 	}
 
+	.highlights:first-child {
+		grid-template-columns: 1fr;
+	}
+
 	.highlights:last-child {
 		grid-template-columns: 0.5fr 1.8fr 1.2fr;
 	}
@@ -808,17 +805,9 @@ body {
 		font-size: 26px;
 	}
 
-	.daily--rain {
-		font-size: 22px;
-	}
-
 	.daily--image {
 		width: 60px;
 		justify-self: flex-end;
-	}
-
-	.daily--rain__icon {
-		width: 15px;
 	}
 
 	/** Navbar data **/
@@ -884,6 +873,12 @@ body {
 
 	.main--search__btn span {
 		font-size: 1.75em;
+	}
+
+	.hour {
+		margin: 0 auto 0 auto;
+		align-self: start;
+		padding-top: 10%;
 	}
 }
 
@@ -1118,7 +1113,6 @@ body {
 	.hour--conditions {
 		background-color: var(--secondary-bg-color);
 		border-radius: 10px;
-		grid-template-rows: 0.5fr 2fr 0.5fr;
 		padding: 0.5em 0 0.5em 0;
 		font-size: 18px;
 	}
@@ -1129,6 +1123,14 @@ body {
 
 	.hour--rain {
 		display: none;
+	}
+
+	.hour {
+		padding: 0;
+	}
+
+	.hour--degrees {
+		padding: 0;
 	}
 
 	/** Weekly weather */
