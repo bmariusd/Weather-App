@@ -323,7 +323,15 @@ body {
 	display: grid;
 }
 
+.weekly--weather.active.no--display {
+	display: none;
+}
+
 .desktop--weekly__weather {
+	display: none;
+}
+
+.desktop--weekly__weather.no--display {
 	display: none;
 }
 
@@ -415,6 +423,10 @@ body {
 	display: grid;
 }
 
+.today.active--grid.no--display {
+	display: none;
+}
+
 .today.active img {
 	filter: invert(32%) sepia(43%) saturate(2956%) hue-rotate(221deg) brightness(83%) contrast(97%);
 }
@@ -435,6 +447,10 @@ body {
 
 .weekly.active--grid {
 	display: grid;
+}
+
+.weekly.active--grid.no--display {
+	display: none;
 }
 
 .weekly.active img {
@@ -1153,6 +1169,10 @@ body {
 		border-radius: 0px 60px 0px 0px;
 	}
 
+	.desktop--weekly__weather.no--display {
+		display: none;
+	}
+
 	.desktop--weekly__conditions {
 		display: grid;
 		grid-row: 1 / 2;
@@ -1679,7 +1699,7 @@ body {
 	height: 100%;
 	position: relative;
 	grid-row: 1 / 8;
-	grid-column: 1/ 3;
+	grid-column: 1/ 4;
 	top: 0;
 	left: 0;
 	background-color: var(--main-bg-color);

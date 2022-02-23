@@ -9,6 +9,9 @@ let lon = '';
 const loadingImage = document.querySelector('.loader-wrapper');
 const noDisplay = document.querySelectorAll('.no--display');
 const searchForACity = document.querySelector('.search--city');
+const city = document.querySelector('.city');
+const mainCity = document.querySelector('.main--city__name');
+const errorMessage = document.querySelector('#error--message');
 
 //* MAIN DETAILS QUERY SELECTORS:
 const mainDate = document.querySelector('.today--date');
@@ -204,17 +207,48 @@ searchBtn.forEach((x) => {
 	});
 
 	x.addEventListener('click', async () => {
-		noDisplay.forEach((x) => {
-			x.classList.remove('no--display');
-		});
+		// noDisplay.forEach((x) => {
+		// 	x.classList.remove('no--display');
+		// });
 
-		todayNavbar.classList.add('active--grid');
-		weeklyNavbar.classList.add('active--grid');
-		mobileSearch.classList.add('active');
-		search.classList.remove('active');
+		console.log(userInput);
+
 		const data = await geoLocate();
-		lat = data[0].lat;
-		lon = data[0].lon;
+
+		try {
+			lat = data[0].lat;
+			lon = data[0].lon;
+			todayNavbar.classList.add('active--grid');
+			weeklyNavbar.classList.add('active--grid');
+			mobileSearch.classList.add('active');
+			search.classList.remove('active');
+			noDisplay.forEach((x) => {
+				x.classList.remove('no--display');
+			});
+
+			desktopWeekly.classList.remove('no--display');
+			todayBtn.classList.remove('no--display');
+			weekly.classList.remove('no--display');
+			weeklyBtn.classList.remove('no--display');
+			loadingImage.classList.remove('hide');
+		} catch (e) {
+			errorMessage.textContent = 'An error occured. Please search again . . .';
+			noDisplay.forEach((x) => {
+				x.classList.add('no--display');
+			});
+			searchForACity.classList.remove('no--display');
+			desktopWeekly.classList.add('no--display');
+			todayBtn.classList.add('no--display');
+			weekly.classList.add('no--display');
+			weeklyBtn.classList.add('no--display');
+			loadingImage.classList.add('hide');
+			userInput[0].value = '';
+			userInput[1].value = '';
+		}
+
+		city.textContent = `${data[0].name}, ${data[0].country}`;
+		mainCity.textContent = `${data[0].name}, ${data[0].country}`;
+
 		const airPolutionData = await airPolution();
 		highlightsData.airQualityIndex = airPolutionData.list[0].main.aqi;
 		const weatherData = await getWeatherData();
@@ -232,6 +266,7 @@ searchBtn.forEach((x) => {
 		//getPhoto();
 
 		userInput[0].value = '';
+		userInput[1].value = '';
 		loadingImage.classList.add('hide');
 	});
 });
@@ -275,19 +310,20 @@ mobileSearch.addEventListener('click', () => {
 	search.classList.add('active');
 });
 
-mobileSearchBtn.addEventListener('click', () => {
-	userInput[1].value = '';
-});
-
 const geoLocate = async () => {
-	const response = await fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${userInput[0].value}&limit=1&appid=${WEATHER_API_KEY}`);
+	const response = await fetch(
+		`http://api.openweathermap.org/geo/1.0/direct?q=${userInput[0].value || userInput[1].value}&limit=1&appid=${WEATHER_API_KEY}`
+	);
 	const data = await response.json();
+	console.log(data);
 	return data;
 };
 
 const getPhoto = async () => {
 	const proxyUrl = 'https://myc0rsproxy.herokuapp.com/';
-	const placesRequestUrl = `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${userInput[0].value}&key=${API_KEY}&inputtype=textquery&fields=name,photos`;
+	const placesRequestUrl = `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${
+		userInput[0].value || userInput[1].value
+	}&key=${API_KEY}&inputtype=textquery&fields=name,photos`;
 
 	const initialPlacesRequest = await fetch(`${proxyUrl + placesRequestUrl}`)
 		.then((res) => res.json())
