@@ -21,6 +21,7 @@ I made this simple application to get weather data based on user input.
 To run this project, you will need to add the following environment variables to your .env file
 
 `API_KEY` -> Google Places API key
+
 `WEATHER_API_KEY` -> Open Weather Map API key
 
 ## Color Used in the project
