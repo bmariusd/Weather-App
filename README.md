@@ -39,7 +39,8 @@ To run this project, you will need to add the following environment variables to
 
 ## Demo
 
-You can find a live version of this application at the following link: 
+You can find a live version of this application at the following link: [DEMO](https://weather-app.bmariusd.dev)
+ 
 
 ## License
 
