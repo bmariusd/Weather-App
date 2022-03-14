@@ -6,15 +6,15 @@ I made this simple application to get weather data based on user input.
 
 | Color             | Hex                                                                |
 | ----------------- | ------------------------------------------------------------------ |
-| Example Color | ![#0a192f](https://via.placeholder.com/10/0a192f?text=+) #0a192f |
-| Example Color | ![#f8f8f8](https://via.placeholder.com/10/f8f8f8?text=+) #f8f8f8 |
-| Example Color | ![#00b48a](https://via.placeholder.com/10/00b48a?text=+) #00b48a |
-| Example Color | ![#00d1a0](https://via.placeholder.com/10/00b48a?text=+) #00d1a0 |
+| --main-bg-color | ![#f1f1f1](https://via.placeholder.com/10/f1f1f1?text=+) #f1f1f1 |
+| --secondary-bg-color | ![#ffffff](https://via.placeholder.com/10/ffffff?text=+) #ffffff |
+| --third-bg-color | ![#c1c2c6](https://via.placeholder.com/10/c1c2c6?text=+) #c1c2c6 |
+| --main-colo | ![#4050d1](https://via.placeholder.com/10/4050d1?text=+) #4050d1 |
 
 
 ## Demo
 
-Below you can see some screenshots and a live website where you can try the application.
+You can find a live version of this application at the following link: 
 
 ## Environment Variables
 
