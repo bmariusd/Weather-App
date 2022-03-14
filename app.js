@@ -1,6 +1,6 @@
 //* API
-const API_KEY = 'AIzaSyB3OwFNcIQkNK6t45-w8P8zEHlpWiU4qco';
-const WEATHER_API_KEY = '9ed2728a9438d79484824734002d11f1';
+const API_KEY = config.API_KEY;
+const WEATHER_API_KEY = config.WEATHER_API_KEY;
 const userInput = document.querySelectorAll('.nav--search__name');
 let lat = '';
 let lon = '';
@@ -68,46 +68,46 @@ const todayNavbar = document.querySelector('.today');
 const weeklyNavbar = document.querySelector('.weekly');
 const mobileSearch = document.querySelector('.mobile--search');
 
-// TODO after I get the data from the API
+//* Main data object:
 const mainData = {
 	mainDate: new Date(),
-	mainWeather: `few-clouds`,
+	mainWeather: '',
 	mainTemp: {
-		celsius: '10°',
-		fahrenheit: '60°',
+		celsius: '',
+		fahrenheit: '',
 	},
-	mainCondition: `Heavy Snow`,
+	mainCondition: '',
 	mainDegreesRange: {
-		celsius: `10°/-2°`,
-		fahrenheit: `50°/42°`,
+		celsius: '',
+		fahrenheit: '',
 	},
-	mainRain: `78%`,
+	mainRain: '',
 	celsiusFahrenheit: 'Celsius',
 };
 
-// TODO after I get the data from the API
+//* Hourly data object:
 const hourlyData = {
 	hourlyTimes: ['3 am', '6 am', '9 am', '12 pm', '3 pm', '6 pm', '9 pm'],
 	hourlyTemperatures: {
-		celsius: ['10°', '11°', '12°', '13°', '14°', '15°', '16°'],
-		fahrenheit: ['60°', '61°', '62°', '63°', '64°', '65°', '66°'],
+		celsius: [],
+		fahrenheit: [],
 	},
-	hourlyRain: ['10%', '15%', '20%', '25%', '30%', '35%', '40%'],
-	hourlyImages: ['thunderstorm', 'scattered-clouds', 'few-clouds', '25%', '30%', '35%', '40%'],
+	hourlyRain: [],
+	hourlyImages: [],
 };
 
-// TODO after I get the data from the API
+//* Weekly data object:
 const weeklyData = {
 	weeklyDays: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
 	weeklyTemperatures: {
-		celsius: ['0° / 10°', '1° / 11°', '2° / 12°', '3° / 13°', '4° / 14°', '5° / 15°', '6° / 16°'],
-		fahrenheit: ['50° / 60°', '51° / 61°', '52° / 62°', '53° / 63°', '54° / 64°', '55° / 65°', '56° / 66°'],
+		celsius: [],
+		fahrenheit: [],
 	},
-	weeklyRain: ['10%', '15%', '20%', '25%', '30%', '35%', '40%'],
-	weeklyImages: ['thunderstorm', 'scattered-clouds', 'few-clouds', '25%', '30%', '35%', '40%'],
+	weeklyRain: [],
+	weeklyImages: [],
 };
 
-// TODO after I get the data from the API
+//* Highlights data object:
 const highlightsData = {
 	uvIndex: 8,
 	windStatus: 16.5,
@@ -128,7 +128,7 @@ mainDegreesRange.textContent = mainData.mainDegreesRange;
 mainRain.textContent = `Pressure - ${mainData.mainRain}`;
 cityImg.src = '/images/bucharest.jpg';
 
-//* Generate all hourly HTML data:
+//* Generate hourly and weekly HTML data:
 for (let i = 6; i > 0; i--) {
 	hourly.insertAdjacentHTML(
 		'afterend',
@@ -180,26 +180,6 @@ const desktopWeeklyDegrees = document.querySelectorAll('.desktop--weekly__degree
 const desktopWeeklyImage = document.querySelectorAll('.desktop--weekly__image');
 
 //* Change today hourly and weekly data from API!
-for (let i = 0; i < 7; i++) {
-	// hourCondition[i].textContent = hourlyData.hourlyTimes[i];
-	// hourDegrees[i].textContent = hourlyData.hourlyTemperatures[i];
-	// hourImage[i].setAttribute('data', `/images/${hourlyData.hourlyImages[0]}.svg`);
-	// hourRain[i].textContent = hourlyData.hourlyRain[i];
-
-	// weeklyDay[i].textContent = weeklyData.weeklyDays[i];
-	weeklyDegrees[i].textContent = weeklyData.weeklyTemperatures[i];
-	weeklyImage[i].setAttribute('data', `/images/${weeklyData.weeklyImages[0]}.svg`);
-
-	desktopWeeklyDay[i].textContent = weeklyDay[i].textContent;
-	desktopWeeklyDegrees[i].textContent = weeklyDegrees[i].textContent;
-	desktopWeeklyImage[i].setAttribute('data', `/images/${weeklyData.weeklyImages[0]}.svg`);
-}
-
-sunrise.textContent = highlightsData.sunrise;
-sunset.textContent = highlightsData.sunset;
-sunriseDifference.textContent = '-3m 25s';
-sunsetDifference.textContent = '+1m 10s';
-
 searchBtn.forEach((x) => {
 	x.addEventListener('click', () => {
 		loadingImage.classList.remove('hide');
@@ -207,13 +187,8 @@ searchBtn.forEach((x) => {
 	});
 
 	x.addEventListener('click', async () => {
-		// noDisplay.forEach((x) => {
-		// 	x.classList.remove('no--display');
-		// });
-
-		console.log(userInput);
-
 		const data = await geoLocate();
+		await getPhoto();
 
 		try {
 			lat = data[0].lat;
@@ -256,14 +231,9 @@ searchBtn.forEach((x) => {
 
 		const yesterdayData = await getYesterdayData();
 		updateSunriseSunsetDiff(yesterdayData);
-		console.log(weatherData);
 
 		modifyAQI();
 		updateData();
-
-		let photoRef = '';
-
-		//getPhoto();
 
 		userInput[0].value = '';
 		userInput[1].value = '';
@@ -271,7 +241,6 @@ searchBtn.forEach((x) => {
 	});
 });
 
-//*TODO */
 celsiusFahrenheit.addEventListener('click', () => {
 	celsiusFahrenheit.classList.toggle('active');
 	if (celsiusFahrenheit.classList.contains('active')) {
@@ -315,7 +284,6 @@ const geoLocate = async () => {
 		`http://api.openweathermap.org/geo/1.0/direct?q=${userInput[0].value || userInput[1].value}&limit=1&appid=${WEATHER_API_KEY}`
 	);
 	const data = await response.json();
-	console.log(data);
 	return data;
 };
 
@@ -405,6 +373,7 @@ const updateTodayWeather = async (data) => {
 	}
 
 	updateWeatherIcons(data.daily[0].weather[0].id, mainWeather);
+	modifyWindDirection(highlightsData.windDirection);
 	modifyUVIndex(highlightsData.uvIndex);
 	modifyHumidity(highlightsData.humidity);
 	modifyVisibility(highlightsData.visibility);
